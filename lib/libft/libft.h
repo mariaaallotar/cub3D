@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 12:26:57 by lemercie          #+#    #+#             */
-/*   Updated: 2024/07/22 12:03:54 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/05 16:13:18 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <fcntl.h>
 # include <stdint.h> // uintptr
 # include <stdarg.h> // va_*()
+# include <stdbool.h>
 
 typedef struct s_list
 {
@@ -52,6 +53,7 @@ int		ft_atoi(const char *str);
 void	*ft_calloc(size_t count, size_t size);
 char	*ft_strdup(const char *s1);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
+char	*ft_strjoin_safe(char const *s1, char const *s2);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strtrim(char const *s1, char const *set);
 char	**ft_split(char const *s, char c);
@@ -91,4 +93,17 @@ int		put_in_storage(char **storage, int *storagesize, char *buf,
 			int readsize);
 int		has_newline(char **storage, int *storagesize);
 char	*get_next_line(int fd);
+// free_strs.c
+int		split_free(char **str, int ret_val);
+void	*free_strs(char **str1, char **str2);
+int		free_strs_int(char **str1, char **str2);
+// whitespace.c
+bool	is_whitespace(char c);
+char	*skip_whitespace(char *s);
+// ft_strndup.c
+char	*ft_strndup(const char *s1, size_t len);
+// substr_len.c
+int		substr_len(char *start, char *end);
+// get_word.c
+char	*get_word(char *start);
 #endif

@@ -1,29 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_substr.c                                        :+:      :+:    :+:   */
+/*   whitespace.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/19 16:00:14 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/05 16:33:40 by lemercie         ###   ########.fr       */
+/*   Created: 2025/03/05 15:58:21 by lemercie          #+#    #+#             */
+/*   Updated: 2025/03/05 15:58:57 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-// return null if allocation fails
-// in other fail cases return an empty string
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+bool	is_whitespace(char c)
 {
-	size_t	len_str;
+	return (c == ' ' || c == '\t' || c == '\r' || c == '\n' || c == '\v'
+		|| c == '\f');
+}
 
+char	*skip_whitespace(char *s)
+{
 	if (!s)
-		return (0);
-	len_str = ft_strlen(s);
-	if (start >= ft_strlen(s))
-		return (ft_strndup("", 0));
-	if (len_str - start < len)
-		return (ft_strndup(&s[start], len_str - start));
-	return (ft_strndup(&s[start], len));
+		return (NULL);
+	while (*s && is_whitespace(*s))
+	{
+		s++;
+	}
+	return (s);
 }
