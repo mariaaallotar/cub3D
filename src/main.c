@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 13:41:08 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/05 10:58:33 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/05 11:48:08 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,21 +67,40 @@ static int	open_file(char *filename)
 	}
 	return (fd);
 }
- 
-int	main(int argc, char **argv)
-{
-	int	fd;
 
+bool	has_cub_extension(char *filename)
+{
+	if (ft_strlen(filename) < 4)
+		return (false);
+	if (ft_strncmp(ft_strrchr(filename, '.'), ".cub", 5) == 0)
+		return (true);
+	return (false);
+}
+
+void	validate_arguments(int argc, char **argv)
+{
 	if (argc == 1)
 	{
 		ft_printf("Error: Filename missing\n");
-		return (1);
+		exit(1);
 	}
 	if (argc > 2)
 	{
 		ft_printf("Error: Too many arguments\n");
-		return (1);
+		exit(1);
 	}
+	if (!has_cub_extension(argv[1]))
+	{
+		ft_printf("Error: this is not a .cub file\n");
+		exit(1);
+	}
+}
+
+int	main(int argc, char **argv)
+{
+	int	fd;
+
+	validate_arguments(argc, argv);
 	fd = open_file(argv[1]);
 	draw_map(); 
 	return (0);
