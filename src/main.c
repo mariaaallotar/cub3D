@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 13:41:08 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/05 12:25:30 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/05 13:03:55 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static int	open_file(char *filename)
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
 	{
-		ft_printf("Error: Could not open file\n");
+		ft_putstr_fd("Error: Could not open file\n", 2);
 		exit (1);
 	}
 	return (fd);
