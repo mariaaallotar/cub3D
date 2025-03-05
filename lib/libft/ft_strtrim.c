@@ -6,13 +6,14 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:44:45 by lemercie          #+#    #+#             */
-/*   Updated: 2024/05/07 11:49:44 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/05 16:19:35 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static char	*ft_strndup(const char *s1, size_t len)
+// TODO: get rid of this and use library function
+static char	*ft_strndup2(const char *s1, size_t len)
 {
 	char	*dst;
 	int		i;
@@ -40,9 +41,9 @@ char	*ft_strtrim(char const *s1, char const *set)
 	if (!s1 || !set)
 		return (0);
 	if (ft_strlen(s1) == 0)
-		return (ft_strndup("", 0));
+		return (ft_strndup2("", 0));
 	if (ft_strlen(set) == 0)
-		return (ft_strndup(s1, ft_strlen(s1)));
+		return (ft_strndup2(s1, ft_strlen(s1)));
 	i_start = 0;
 	while (ft_strchr(set, s1[i_start]))
 	{
@@ -53,7 +54,7 @@ char	*ft_strtrim(char const *s1, char const *set)
 	{
 		i_end--;
 		if (i_end < 1)
-			return (ft_strndup("", 0));
+			return (ft_strndup2("", 0));
 	}
-	return (ft_strndup(&s1[i_start], (i_end - i_start) + 1));
+	return (ft_strndup2(&s1[i_start], (i_end - i_start) + 1));
 }

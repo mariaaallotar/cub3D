@@ -6,13 +6,13 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 10:46:03 by lemercie          #+#    #+#             */
-/*   Updated: 2024/05/07 12:03:50 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/05 16:20:26 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static char	*ft_strndup(const char *s1, size_t len)
+static char	*ft_strndup2(const char *s1, size_t len)
 {
 	char	*dst;
 	int		i;
@@ -103,7 +103,7 @@ char	**ft_split(char const *s, char c)
 			i++;
 		if (ft_len_substr(&s[i], c) > 0)
 		{
-			result[i_result++] = ft_strndup(&s[i], ft_len_substr(&s[i], c));
+			result[i_result++] = ft_strndup2(&s[i], ft_len_substr(&s[i], c));
 			if (!result[i_result - 1])
 				return (ft_free_str_array(result, i_result));
 		}
