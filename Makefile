@@ -6,7 +6,7 @@
 #    By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2025/03/05 10:45:34 by lemercie         ###   ########.fr        #
+#    Updated: 2025/03/05 12:30:44 by lemercie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ LIBFT	:= ./lib/libft
 HEADERS	:= -I ./include -I $(LIBMLX)/include -I $(LIBFT)
 LIBS	:= $(LIBMLX)/build/libmlx42.a -ldl -lglfw -pthread -lm
 SRCDIR	:= ./src/
-SRCS	:= $(addprefix $(SRCDIR), main.c)
+SRCS	:= $(addprefix $(SRCDIR), main.c validate_args.c)
 OBJS	:= ${SRCS:.c=.o}
 
 all: libft libmlx $(NAME)
