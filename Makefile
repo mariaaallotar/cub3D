@@ -6,7 +6,7 @@
 #    By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2025/03/05 14:19:18 by maheleni         ###   ########.fr        #
+#    Updated: 2025/03/05 14:30:48 by maheleni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ LIBS	:= $(LIBMLX)/build/libmlx42.a -ldl -lglfw -pthread -lm
 SRCDIR	:= ./src/
 OBJDIR	:= ./obj/
 
-SRCS	:= $(addprefix $(SRCDIR), main.c)
+SRCS	:= $(addprefix $(SRCDIR), main.c validate_args.c)
 OBJS	:= ${SRCS:$(SRCDIR)%.c=$(OBJDIR)%.o}
 
 all: libft libmlx $(NAME)
