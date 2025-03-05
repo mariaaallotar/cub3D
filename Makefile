@@ -6,7 +6,7 @@
 #    By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2025/03/05 14:30:48 by maheleni         ###   ########.fr        #
+#    Updated: 2025/03/05 14:36:55 by maheleni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,8 +53,8 @@ clean:
 
 fclean: clean
 	rm -rf $(NAME)
-	rm -rf $(LIBMLX)		#maybe remove
-	rm -rf .libmlx_cloned	#maybe remove
+	rm -rf $(LIBMLX)
+	rm -rf .libmlx_cloned
 	make fclean -C $(LIBFT)
 
 re: clean all
