@@ -6,7 +6,7 @@
 #    By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2025/03/05 14:36:55 by maheleni         ###   ########.fr        #
+#    Updated: 2025/03/05 14:39:36 by maheleni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,7 +46,6 @@ $(OBJDIR)%.o: $(SRCDIR)%.c
 	$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS) 
 
 clean:
-	#rm -rf $(OBJS)
 	rm -rf $(OBJDIR)
 	make clean -C $(LIBFT)
 	rm -fr $(LIBMLX)/build
