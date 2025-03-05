@@ -6,22 +6,11 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 16:00:14 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/05 16:17:05 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/05 16:33:40 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
-char	*ft_strndup(const char *s1, size_t n)
-{
-	char	*result;
-
-	result = (char *) malloc(sizeof(char) * (n + 1));
-	if (!result)
-		return (0);
-	ft_strlcpy(result, s1, n + 1);
-	return (result);
-}
 
 // return null if allocation fails
 // in other fail cases return an empty string
