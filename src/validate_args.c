@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 12:23:53 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/05 12:24:49 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/05 12:36:02 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,17 @@ void	validate_arguments(int argc, char **argv)
 {
 	if (argc == 1)
 	{
-		ft_printf("Error: Filename missing\n");
+		ft_putstr_fd("Error: Filename missing\n", 2);
 		exit(1);
 	}
 	if (argc > 2)
 	{
-		ft_printf("Error: Too many arguments\n");
+		ft_putstr_fd("Error: Too many arguments\n", 2);
 		exit(1);
 	}
 	if (!has_cub_extension(argv[1]))
 	{
-		ft_printf("Error: this is not a .cub file\n");
+		ft_putstr_fd("Error: this is not a .cub file\n", 2);
 		exit(1);
 	}
 }
