@@ -6,11 +6,19 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 16:50:30 by lemercie          #+#    #+#             */
-/*   Updated: 2024/05/07 11:49:06 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/05 16:02:24 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
+// returns s1 if s2 is NULL
+char	*ft_strjoin_safe(char const *s1, char const *s2)
+{
+	if (!s2)
+		return (ft_strdup(s1));
+	return (ft_strjoin(s1, s2));
+}
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {

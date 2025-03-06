@@ -6,7 +6,7 @@
 #    By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/24 10:50:44 by lemercie          #+#    #+#              #
-#    Updated: 2024/08/30 14:56:28 by lemercie         ###   ########.fr        #
+#    Updated: 2025/03/05 16:16:18 by lemercie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,8 @@ SRCS = ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c \
 	   ft_atoi.c ft_calloc.c ft_strdup.c ft_substr.c ft_strjoin.c ft_strtrim.c \
 	   ft_split.c ft_itoa.c ft_strmapi.c ft_striteri.c ft_putchar_fd.c \
 	   ft_putstr_fd.c ft_putendl_fd.c ft_putnbr_fd.c ft_atoi_safe.c \
-	   ft_atoi_safe_2.c
+	   ft_atoi_safe_2.c free_strs.c whitespace.c ft_strndup.c substr_len.c \
+	   get_word.c
 
 SRCS_BONUS = ft_lstnew_bonus.c ft_lstadd_front_bonus.c ft_lstsize_bonus.c \
 			 ft_lstlast_bonus.c ft_lstadd_back_bonus.c ft_lstdelone_bonus.c \
