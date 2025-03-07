@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 13:41:08 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/06 12:14:02 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/07 14:45:22 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	start_graphics(int image_width, int image_heigth)
 	mlx_t		*mlx;
 	mlx_image_t	*image;
 
-	mlx = mlx_init(image_width, image_heigth, "FdF", true);
+	mlx = mlx_init(image_width, image_heigth, "cub3D", true);
 	// if (!mlx)
 		// fdf_cleanup_exit(map);
 	image = mlx_new_image(mlx, image_width, image_heigth);
@@ -80,6 +80,7 @@ void	init_input_struct(t_input *input)
 	input->ea_texture = NULL;
 	input->so_texture = NULL;
 	input->we_texture = NULL;
+	input->map = NULL;
 }
 
 void	init_main_struct(t_cub3D *main_struct)
@@ -102,6 +103,40 @@ void	print_input_struct(t_cub3D main_struct)
 	printf("C %i,%i,%i\n", main_struct.input.ceiling_color.r,
 		main_struct.input.ceiling_color.g,
 		main_struct.input.ceiling_color.b);
+	
+	t_map_line	*map_line = main_struct.input.map;
+	while (map_line != NULL)
+	{
+		printf("%s", map_line->line);
+		map_line = map_line->next;
+	}
+}
+
+void	free_map_list(t_map_line *map)
+{
+	t_map_line *current;
+
+	current = map;
+	while (current != NULL)
+	{
+		free(current->line);
+		if (current->next == NULL)
+		{
+			free(current);
+			break ;
+		}
+		current = current->next;
+		free(current->previous);
+	}
+}
+
+void	free_everything(t_cub3D	*main_struct)
+{
+	free(main_struct->input.no_texture);
+	free(main_struct->input.ea_texture);
+	free(main_struct->input.so_texture);
+	free(main_struct->input.we_texture);
+	free_map_list(main_struct->input.map);
 }
 
 int	main(int argc, char **argv)
@@ -114,6 +149,7 @@ int	main(int argc, char **argv)
 	init_main_struct(&main_struct);
 	parse_file(fd, &main_struct);
 	print_input_struct(main_struct);
-	draw_map(); 
+	draw_map();
+	free_everything(&main_struct);
 	return (0);
 }

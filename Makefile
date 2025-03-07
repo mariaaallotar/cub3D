@@ -6,13 +6,13 @@
 #    By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2025/03/05 15:06:47 by maheleni         ###   ########.fr        #
+#    Updated: 2025/03/07 13:12:08 by maheleni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	:= cub3D
 CC		:= cc
-CFLAGS	:= -Wextra -Wall -Werror
+CFLAGS	:= -Wextra -Wall -Werror -g
 LIBMLX	:= ./lib/MLX42
 LIBFT	:= ./lib/libft
 

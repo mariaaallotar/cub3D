@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:04:23 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/06 12:12:47 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/07 13:01:45 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,29 +17,37 @@
 # include <math.h>
 # include <stdio.h>
 
+typedef struct s_map_line
+{
+	char		*line;
+	int			length;
+	struct s_map_line	*next;
+	struct s_map_line	*previous;
+}	t_map_line;
+
 typedef struct s_rbg 
 {
-    unsigned int r;
-    unsigned int g;
-    unsigned int b; 
-}   t_rgb;
-
+	unsigned int r;
+	unsigned int g;
+	unsigned int b; 
+}	t_rgb;
 
 typedef struct s_input
 {
-    t_rgb   floor_color;
-    t_rgb   ceiling_color;
-    char    *no_texture;
-    char    *ea_texture;
-    char    *so_texture;
-    char    *we_texture;
-    //char    **map;
-}   t_input;
+	t_rgb   floor_color;
+	t_rgb   ceiling_color;
+	char    *no_texture;
+	char    *ea_texture;
+	char    *so_texture;
+	char    *we_texture;
+	t_map_line	*map;
+	//char    **map;
+}	t_input;
 
 typedef struct s_cub3D
 {
-    t_input input;
-}   t_cub3D;
+	t_input input;
+}	t_cub3D;
 
 //validate_args.c
 void	validate_arguments(int argc, char **argv);

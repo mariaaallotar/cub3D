@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 11:00:53 by maheleni          #+#    #+#             */
-/*   Updated: 2025/03/06 12:13:19 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/07 14:47:33 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void	parse_color(char *rgb, enum e_location location, t_cub3D *main_struct)
 		set_rgb(&(main_struct->input.floor_color), rgb_split);
 	else if (location == CEILING)
 		set_rgb(&(main_struct->input.ceiling_color), rgb_split);
+	split_free(rgb_split, 0);
 }
 
 int	set_floor_ceiling(char *type_identifier, char *color_code,
@@ -83,6 +84,49 @@ void	set_wall_texture(char *type_identifier, char *texture,
 		main_struct->input.we_texture = ft_strtrim(texture, "\n");
 }
 
+void	init_map_line(t_map_line *current, char *line, t_map_line *previous)
+{
+	current->line = line;
+	current->length = ft_strlen(line);
+	current->previous = previous;
+	current->next = NULL;
+}
+
+void	set_map(char *line, int fd, t_cub3D *main_struct)
+{
+	t_map_line	*current;
+	t_map_line	*previous;
+
+	previous = NULL;
+	while (line != NULL)
+	{
+		current = malloc (sizeof(t_map_line));
+		//check fail
+		if (previous != NULL)
+			previous->next = current;
+		init_map_line(current, line, previous);
+		if (main_struct->input.map == NULL)
+			main_struct->input.map = current;
+		previous = current;
+		line = get_next_line(fd);
+	}
+}
+
+int	start_of_map(char *line)
+{
+	char	*word;
+
+	word = get_word(line);
+	//check if it failed
+	if (word[0] == '1')
+	{
+		free(word);
+		return (1);
+	}
+	free(word);
+	return (0);
+}
+
 void	parse_split_line(char **split_line, t_cub3D *main_struct)
 {
 	set_floor_ceiling(split_line[0], split_line[1], main_struct);
@@ -91,15 +135,22 @@ void	parse_split_line(char **split_line, t_cub3D *main_struct)
 
 void	parse_file(int fd, t_cub3D *main_struct)
 {
-	char	*line;
-	char	**split_line;
+	char		*line;
+	char		**split_line;
 
 	line = get_next_line(fd);
 	while (line != NULL)
 	{
+		if (start_of_map(line))
+		{
+			printf("going to set map");
+			set_map(line, fd, main_struct);
+			break ;
+		}
 		split_line = ft_split(line, ' ');
 		free(line);
 		parse_split_line(split_line, main_struct);
+		split_free(split_line, 0);
 		line = get_next_line(fd);
 	}
 }
