@@ -6,22 +6,27 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:33:57 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/07 15:40:12 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/07 16:46:18 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
 
+static void	draw()
+{
+
+}
+
 static void	game_hook(void *param)
 {
-	// TODO: create a struct thht holds the game data and the mlx objet, so
+	// TODO: create a struct that holds the game data and the mlx object, so
 	// that we can pas it to this function
 	mlx_t	*mlx;
 
 	mlx = param;
 	if (mlx_is_key_down(mlx, MLX_KEY_ESCAPE))
 		mlx_close_window(mlx);
-
+	draw();
 }
 
 void	start_graphics(int image_width, int image_heigth)
