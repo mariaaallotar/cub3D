@@ -6,7 +6,8 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:04:23 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/10 16:13:16 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/12 11:19:20 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/07 15:35:31 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +58,8 @@ void    parse_file(int fd, t_cub3D *main_struct);
 
 //colors.c
 int32_t convert_color(int32_t r, int32_t g, int32_t b, int32_t a);
+//game_loop.c
+void	start_graphics(int image_width, int image_heigth);
+
 
 #endif
