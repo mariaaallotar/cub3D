@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:04:23 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/06 12:12:47 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/07 15:35:31 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,9 @@ void	validate_arguments(int argc, char **argv);
 
 //parse_file.c
 void    parse_file(int fd, t_cub3D *main_struct);
+
+//game_loop.c
+void	start_graphics(int image_width, int image_heigth);
 
 
 #endif
