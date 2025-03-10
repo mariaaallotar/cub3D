@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 13:41:08 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/07 14:45:22 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/10 16:00:59 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,10 +93,6 @@ void	init_main_struct(t_cub3D *main_struct)
 
 void	print_input_struct(t_cub3D main_struct)
 {
-	printf("NO %s\n", main_struct.input.no_texture);
-	printf("EA %s\n", main_struct.input.ea_texture);
-	printf("SO %s\n", main_struct.input.so_texture);
-	printf("WE %s\n", main_struct.input.we_texture);
 	printf("F %i,%i,%i\n", main_struct.input.floor_color.r,
 		main_struct.input.floor_color.g,
 		main_struct.input.floor_color.b);
@@ -110,33 +106,6 @@ void	print_input_struct(t_cub3D main_struct)
 		printf("%s", map_line->line);
 		map_line = map_line->next;
 	}
-}
-
-void	free_map_list(t_map_line *map)
-{
-	t_map_line *current;
-
-	current = map;
-	while (current != NULL)
-	{
-		free(current->line);
-		if (current->next == NULL)
-		{
-			free(current);
-			break ;
-		}
-		current = current->next;
-		free(current->previous);
-	}
-}
-
-void	free_everything(t_cub3D	*main_struct)
-{
-	free(main_struct->input.no_texture);
-	free(main_struct->input.ea_texture);
-	free(main_struct->input.so_texture);
-	free(main_struct->input.we_texture);
-	free_map_list(main_struct->input.map);
 }
 
 int	main(int argc, char **argv)
