@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:04:23 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/07 13:01:45 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/10 16:13:16 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,7 @@ void	validate_arguments(int argc, char **argv);
 //parse_file.c
 void    parse_file(int fd, t_cub3D *main_struct);
 
+//colors.c
+int32_t convert_color(int32_t r, int32_t g, int32_t b, int32_t a);
 
 #endif
