@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 13:41:08 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/07 15:34:53 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/10 15:43:54 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ static void	init_game()
 	int		image_width;
 	int		image_heigth;
 
-	image_width = 1600;
-	image_heigth = 1000;
+	image_width = 1280;
+	image_heigth = 1024;
 	start_graphics(image_width, image_heigth);
 }
 
