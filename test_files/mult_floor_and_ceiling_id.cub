@@ -1,9 +1,9 @@
 F 220,100,0
-NO ./path_to_the_north_texture
-SO ./path_to_the_south_texture
-WE ./path_to_the_west_texture
+NO ./textures/north.png
+SO ./textures/south.png
+WE ./textures/west.png
 C 225,30,0
-EA ./path_to_the_east_texture
+EA ./textures/east.png
 
 F 0,0,0
 C 5,0,0
