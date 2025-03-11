@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:33:57 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/11 15:11:16 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/11 17:53:40 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int	testMap2[24][24] =
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 };
+
 typedef struct s_point_double
 {
 	double	x;
@@ -90,10 +91,10 @@ static void draw_vert_line(mlx_image_t *image, int x, int start_y, int end_y, ui
 
 typedef struct s_draw
 {
-	mlx_t		*mlx;
-	mlx_image_t	*image;
-	int			image_width;
-	int			image_heigth;
+	mlx_t			*mlx;
+	mlx_image_t		*image;
+	int				image_width;
+	int				image_heigth;
 	t_point_double	player_pos;
 	t_point_double	player_dir;
 	t_point_double	camera_plane;
@@ -157,7 +158,8 @@ static void	draw(mlx_image_t *image, t_draw *data)
 		else
 		{
 			//can be simplified
-			ray_step_dist.x = sqrt(1 + (ray_dir.y * ray_dir.y) / (ray_dir.x * ray_dir.x));
+			// ray_step_dist.x = sqrt(1 + (ray_dir.y * ray_dir.y) / (ray_dir.x * ray_dir.x));
+			ray_step_dist.x = fabs(1/ray_dir.x);
 		}
 		if (ray_dir.y == 0)//to avoid divison by zero
 		{
@@ -166,7 +168,8 @@ static void	draw(mlx_image_t *image, t_draw *data)
 		else
 		{
 			// can be simplified
-			ray_step_dist.y = sqrt(1 + (ray_dir.x * ray_dir.x) / (ray_dir.y * ray_dir.y));
+			// ray_step_dist.y = sqrt(1 + (ray_dir.x * ray_dir.x) / (ray_dir.y * ray_dir.y));
+			ray_step_dist.y = fabs(1/ray_dir.y);
 		}
 
 		// are we moving is positive or negative direction on the axis?
@@ -174,7 +177,7 @@ static void	draw(mlx_image_t *image, t_draw *data)
 		if (ray_dir.x < 0)
 		{
 			step_dir.x = -1;
-			ray_dist_to_side.x = (data->player_pos.x  - ray_pos.x) * ray_step_dist.x;
+			ray_dist_to_side.x = (data->player_pos.x - ray_pos.x) * ray_step_dist.x;
 		}
 		else
 		{
@@ -208,10 +211,10 @@ static void	draw(mlx_image_t *image, t_draw *data)
 			else
 			{
 				ray_dist_to_side.y += ray_step_dist.y;
-				ray_pos.y = step_dir.y;
+				ray_pos.y += step_dir.y;
 				wall_side = 1;
 			}
-			if (testMap2[ray_pos.x][ray_pos.y] > 0)
+			if (testMap[ray_pos.y][ray_pos.x] > 0)
 			{
 				wall_hit = true;
 			}
@@ -273,23 +276,6 @@ static void	game_hook(void *param)
 	{
 		double new_x;
 		double new_y;
-		new_x = data->player_dir.x * cos(angle) - data->player_dir.y * sin(angle);
-		new_y = data->player_dir.x * sin(angle) + data->player_dir.y * cos(angle);
-		// printf("x: %f, y: %f\n", new_x, new_y);
-		data->player_dir.x = new_x;
-		data->player_dir.y = new_y;
-
-		new_x = data->camera_plane.x * cos(angle) - data->camera_plane.y * sin(angle);
-		new_y = data->camera_plane.x * sin(angle) + data->camera_plane.y * cos(angle);
-		// printf("x: %f, y: %f\n", new_x, new_y);
-		data->camera_plane.x = new_x;
-		data->camera_plane.y = new_y;
-
-	}
-	else if (mlx_is_key_down(mlx, MLX_KEY_RIGHT))
-	{
-		double new_x;
-		double new_y;
 		new_x = data->player_dir.x * cos(-angle) - data->player_dir.y * sin(-angle);
 		new_y = data->player_dir.x * sin(-angle) + data->player_dir.y * cos(-angle);
 		data->player_dir.x = new_x;
@@ -301,7 +287,53 @@ static void	game_hook(void *param)
 		data->camera_plane.x = new_x;
 		data->camera_plane.y = new_y;
 
+
 	}
+	else if (mlx_is_key_down(mlx, MLX_KEY_RIGHT))
+	{
+		double new_x;
+		double new_y;
+		new_x = data->player_dir.x * cos(angle) - data->player_dir.y * sin(angle);
+		new_y = data->player_dir.x * sin(angle) + data->player_dir.y * cos(angle);
+		// printf("x: %f, y: %f\n", new_x, new_y);
+		data->player_dir.x = new_x;
+		data->player_dir.y = new_y;
+
+		new_x = data->camera_plane.x * cos(angle) - data->camera_plane.y * sin(angle);
+		new_y = data->camera_plane.x * sin(angle) + data->camera_plane.y * cos(angle);
+		// printf("x: %f, y: %f\n", new_x, new_y);
+		data->camera_plane.x = new_x;
+		data->camera_plane.y = new_y;
+	}
+	else if (mlx_is_key_down(mlx, MLX_KEY_W))
+	{
+		data->player_pos.y += data->player_dir.y * 0.1;
+		data->player_pos.x += data->player_dir.x * 0.1;
+		
+	}
+	else if (mlx_is_key_down(mlx, MLX_KEY_S))
+	{
+		data->player_pos.y -= data->player_dir.y *0.1;
+		data->player_pos.x -= data->player_dir.x *0.1;
+	}
+	else if (mlx_is_key_down(mlx, MLX_KEY_A))
+	{
+		data->camera_plane.y += data->camera_plane.y * 0.1;
+		data->camera_plane.x += data->camera_plane.x * 0.1;
+	}
+	else if (mlx_is_key_down(mlx, MLX_KEY_D))
+	{
+		data->camera_plane.y -= data->camera_plane.y * 0.1;
+		data->camera_plane.x -= data->camera_plane.x * 0.1;
+	}
+	if (data->player_pos.x < 1)
+		data->player_pos.x = 1;
+	if (data->player_pos.x > 22)
+		data->player_pos.x = 22;
+	if (data->player_pos.y < 1)
+		data->player_pos.y = 1;
+	if (data->player_pos.y > 22)
+		data->player_pos.y = 22;
 	draw(image, data);
 }
 
@@ -330,8 +362,8 @@ void	start_graphics(int image_width, int image_heigth)
 	draw.image_width = image_width;
 	draw.image_heigth = image_heigth;
 	draw.player_pos.x = 5;
-	draw.player_pos.y = 5;
-	draw.player_dir.x = -1;
+	draw.player_pos.y = 12;
+	draw.player_dir.x = 1;
 	draw.player_dir.y = 0;
 	draw.camera_plane.x = 0;
 	draw.camera_plane.y = 0.66;
