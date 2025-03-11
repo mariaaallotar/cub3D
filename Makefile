@@ -6,8 +6,7 @@
 #    By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2025/03/12 11:18:54 by lemercie         ###   ########.fr        #
-#    Updated: 2025/03/07 15:36:05 by lemercie         ###   ########.fr        #
+#    Updated: 2025/03/12 11:23:53 by lemercie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +22,7 @@ SRCDIR	:= ./src/
 OBJDIR	:= ./obj/
 
 SRCS	:= $(addprefix $(SRCDIR), main.c validate_args.c parse_file.c colors.c \
-		   game_loop.c)
+		   game_loop.c draw_tools.c)
 OBJS	:= ${SRCS:$(SRCDIR)%.c=$(OBJDIR)%.o}
 
 all: libft libmlx $(NAME)
