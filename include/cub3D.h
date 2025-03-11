@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:04:23 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/11 09:55:23 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/11 12:49:08 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,16 @@ enum e_errors
 	DOUBLE_WALL_ID,
 	WRONG_RGB_VALUE,
 	EXTRA_VALUE,
-	NOT_IDENTIFIER
+	NOT_IDENTIFIER,
+	MAP_NOT_LAST,
+	INFO_MISSING,
+	IDENTIFIER_WITHOUT_VALUE
+};
+
+enum e_location
+{
+	FLOOR,
+	CEILING
 };
 
 typedef struct s_map_line
@@ -44,14 +53,14 @@ typedef struct s_rbg
 
 typedef struct s_input
 {
+	int				identifier_counter;
 	t_rgb			floor_color;
 	t_rgb			ceiling_color;
 	mlx_texture_t	*no_texture;
 	mlx_texture_t	*ea_texture;
 	mlx_texture_t	*so_texture;
 	mlx_texture_t	*we_texture;
-	t_map_line		*map;
-	//char    **map;
+	char    		**map;
 }	t_input;
 
 typedef struct s_cub3D
@@ -69,10 +78,23 @@ void    parse_file(int fd, t_cub3D *main_struct);
 int32_t convert_color(int32_t r, int32_t g, int32_t b, int32_t a);
 
 //memory.c
-void	free_everything(t_cub3D	*main_struct);
+void	free_everything(t_cub3D	*main_struct, t_map_line **map);
+void	free_map_list(t_map_line **map);
 
 //error.c
 void	error_and_exit(int return_value);
+
+//color_parsing.c
+int	set_floor_ceiling(char *type_identifier, char *color_code,
+	t_cub3D *main_struct);
+
+//texture_parsing.c
+int	set_wall_texture(char *type_identifier, char *texture,
+	t_cub3D *main_struct);
+
+//map_parsing.c
+int	start_of_map(char **line, t_cub3D *main_struct);
+void	set_map(char *line, int fd, t_map_line **map);
 
 
 #endif

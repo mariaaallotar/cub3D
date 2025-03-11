@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 13:41:08 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/10 16:00:59 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/11 11:27:40 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ void	init_input_struct(t_input *input)
 	input->so_texture = NULL;
 	input->we_texture = NULL;
 	input->map = NULL;
+	input->identifier_counter = 0;
 }
 
 void	init_main_struct(t_cub3D *main_struct)
@@ -89,23 +90,6 @@ void	init_main_struct(t_cub3D *main_struct)
 
 	init_input_struct(&input);
 	main_struct->input = input;
-}
-
-void	print_input_struct(t_cub3D main_struct)
-{
-	printf("F %i,%i,%i\n", main_struct.input.floor_color.r,
-		main_struct.input.floor_color.g,
-		main_struct.input.floor_color.b);
-	printf("C %i,%i,%i\n", main_struct.input.ceiling_color.r,
-		main_struct.input.ceiling_color.g,
-		main_struct.input.ceiling_color.b);
-	
-	t_map_line	*map_line = main_struct.input.map;
-	while (map_line != NULL)
-	{
-		printf("%s", map_line->line);
-		map_line = map_line->next;
-	}
 }
 
 int	main(int argc, char **argv)
@@ -117,8 +101,7 @@ int	main(int argc, char **argv)
 	fd = open_file(argv[1]);
 	init_main_struct(&main_struct);
 	parse_file(fd, &main_struct);
-	print_input_struct(main_struct);
 	draw_map();
-	free_everything(&main_struct);
+	free_everything(&main_struct, NULL);
 	return (0);
 }

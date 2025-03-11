@@ -6,17 +6,18 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 13:06:24 by maheleni          #+#    #+#             */
-/*   Updated: 2025/03/10 13:38:10 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/11 11:31:48 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
 
-void	free_map_list(t_map_line *map)
+void	free_map_list(t_map_line **map)
 {
 	t_map_line *current;
+	t_map_line *next;
 
-	current = map;
+	current = *map;
 	while (current != NULL)
 	{
 		free(current->line);
@@ -25,20 +26,22 @@ void	free_map_list(t_map_line *map)
 			free(current);
 			break ;
 		}
-		current = current->next;
-		free(current->previous);
+		next = current->next;
+		free(current);
+		current = next;
 	}
 }
 
-void	free_everything(t_cub3D	*main_struct)
+void	free_everything(t_cub3D	*main_struct, t_map_line **map)
 {
 	if (main_struct->input.no_texture != NULL)
-		free(main_struct->input.no_texture);
+		mlx_delete_texture(main_struct->input.no_texture);
 	if (main_struct->input.ea_texture != NULL)
-		free(main_struct->input.ea_texture);
+		mlx_delete_texture(main_struct->input.ea_texture);
 	if (main_struct->input.so_texture != NULL)
-		free(main_struct->input.so_texture);
+		mlx_delete_texture(main_struct->input.so_texture);
 	if (main_struct->input.we_texture != NULL)
-		free(main_struct->input.we_texture);
-	free_map_list(main_struct->input.map);
+		mlx_delete_texture(main_struct->input.we_texture);
+	if (map != NULL && *map != NULL)
+		free_map_list(map);
 }
