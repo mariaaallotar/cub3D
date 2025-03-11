@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:33:57 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/11 14:18:58 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/11 15:11:16 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,33 @@ int	testMap[24][24] =
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 };
 
+int	testMap2[24][24] = 
+{
+  {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+};
 typedef struct s_point_double
 {
 	double	x;
@@ -184,7 +211,7 @@ static void	draw(mlx_image_t *image, t_draw *data)
 				ray_pos.y = step_dir.y;
 				wall_side = 1;
 			}
-			if (testMap[ray_pos.x][ray_pos.y] > 0)
+			if (testMap2[ray_pos.x][ray_pos.y] > 0)
 			{
 				wall_hit = true;
 			}
@@ -240,15 +267,40 @@ static void	game_hook(void *param)
 	if (mlx_is_key_down(mlx, MLX_KEY_ESCAPE))
 		mlx_close_window(mlx);
 	draw(image, data);
+
+	double angle = 0.02;
 	if (mlx_is_key_down(mlx, MLX_KEY_LEFT))
 	{
-		// data->player_dir.x += 0.1;
-		data->player_dir.y -= 0.1;
+		double new_x;
+		double new_y;
+		new_x = data->player_dir.x * cos(angle) - data->player_dir.y * sin(angle);
+		new_y = data->player_dir.x * sin(angle) + data->player_dir.y * cos(angle);
+		// printf("x: %f, y: %f\n", new_x, new_y);
+		data->player_dir.x = new_x;
+		data->player_dir.y = new_y;
+
+		new_x = data->camera_plane.x * cos(angle) - data->camera_plane.y * sin(angle);
+		new_y = data->camera_plane.x * sin(angle) + data->camera_plane.y * cos(angle);
+		// printf("x: %f, y: %f\n", new_x, new_y);
+		data->camera_plane.x = new_x;
+		data->camera_plane.y = new_y;
+
 	}
 	else if (mlx_is_key_down(mlx, MLX_KEY_RIGHT))
 	{
-		// data->player_dir.x -= -1.1;
-		data->player_dir.y += 0.1;
+		double new_x;
+		double new_y;
+		new_x = data->player_dir.x * cos(-angle) - data->player_dir.y * sin(-angle);
+		new_y = data->player_dir.x * sin(-angle) + data->player_dir.y * cos(-angle);
+		data->player_dir.x = new_x;
+		data->player_dir.y = new_y;
+
+		new_x = data->camera_plane.x * cos(-angle) - data->camera_plane.y * sin(-angle);
+		new_y = data->camera_plane.x * sin(-angle) + data->camera_plane.y * cos(-angle);
+		// printf("x: %f, y: %f\n", new_x, new_y);
+		data->camera_plane.x = new_x;
+		data->camera_plane.y = new_y;
+
 	}
 	draw(image, data);
 }
@@ -277,8 +329,8 @@ void	start_graphics(int image_width, int image_heigth)
 	draw.image = image;
 	draw.image_width = image_width;
 	draw.image_heigth = image_heigth;
-	draw.player_pos.x = 14;
-	draw.player_pos.y = 10;
+	draw.player_pos.x = 5;
+	draw.player_pos.y = 5;
 	draw.player_dir.x = -1;
 	draw.player_dir.y = 0;
 	draw.camera_plane.x = 0;
