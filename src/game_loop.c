@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:33:57 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/11 17:53:40 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/11 18:01:27 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,67 +67,6 @@ int	testMap2[24][24] =
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 };
-
-typedef struct s_point_double
-{
-	double	x;
-	double	y;
-}	t_point_double;
-
-typedef struct s_point_int
-{
-	int	x;
-	int	y;
-}	t_point_int;
-
-static void draw_vert_line(mlx_image_t *image, int x, int start_y, int end_y, uint32_t color)
-{
-	while (start_y < end_y)
-	{
-		mlx_put_pixel(image, x, start_y, color);
-		start_y++;
-	}
-}
-
-typedef struct s_draw
-{
-	mlx_t			*mlx;
-	mlx_image_t		*image;
-	int				image_width;
-	int				image_heigth;
-	t_point_double	player_pos;
-	t_point_double	player_dir;
-	t_point_double	camera_plane;
-} t_draw;
-
-static void	draw_floor_and_ceiling(mlx_image_t *image, t_draw *data)
-{
-	int	color_ceiling;
-	int	color_floor;
-	int	x;
-	int	y;
-
-	color_ceiling = 0x00FF00FF;
-	color_floor = 0x0000FFFF;
-	x = 0;
-	while (x < data->image_width)
-	{
-		y = 0;
-		while (y < data->image_heigth)
-		{
-			if (y < data->image_heigth / 2)
-			{
-				mlx_put_pixel(image, x, y, color_ceiling);
-			}
-			else
-			{
-				mlx_put_pixel(image, x, y, color_floor);
-			}
-			y++;
-		}
-		x++;
-	}
-}
 
 static void	draw(mlx_image_t *image, t_draw *data)
 {
