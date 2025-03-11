@@ -6,10 +6,9 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:59:24 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/11 18:00:32 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/11 18:12:41 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../include/cub3D.h"
 
