@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:04:23 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/12 13:29:04 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/12 17:34:55 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <stdio.h>
 
 // how many radians to turn on one keypress
-const static double	g_cam_turn_speed = 0.02;
+const static double	g_cam_turn_speed = 0.04;
 // how many tiles to walk on one keypress
 const static double	g_player_walk_speed = 0.1;
 // field-of-view

@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:33:57 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/12 17:08:17 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/12 17:29:48 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ int	testMap[24][24] =
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -130,6 +130,7 @@ static t_point_int	calc_ray_step_direction(t_point_double ray_dir)
 	return (step_dir);
 }
 
+// distance to first tile side we encounter
 static t_point_double	calc_ray_dist_to_side(t_draw *data,
 										   t_point_double ray_dir,
 										   t_point_int ray_pos,
@@ -158,6 +159,7 @@ static t_point_double	calc_ray_dist_to_side(t_draw *data,
 	return (ray_dist_to_side);
 }
 
+// This is the core of the DDA algo
 // returns the side of the wall that has been hit
 // also increments ray_dist_to_side for later
 // TODO: proofing against infinite loop here?
@@ -247,10 +249,10 @@ static void	draw(mlx_image_t *image, t_draw *data)
 	t_point_double	ray_dir;
 	t_point_double	ray_step_dist;
 	t_point_int		ray_pos;
-	t_point_double	ray_dist_to_side;// distance to first tile side we encounter
+	t_point_double	ray_dist_to_side;
 	t_point_int		step_dir;
 	int				wall_side;
-	double			perpendicular_wall_dist;
+	double			perp_wall_dist;
 
 	draw_floor_and_ceiling(image, data);
 	cur_screen_col = 0;
@@ -264,12 +266,10 @@ static void	draw(mlx_image_t *image, t_draw *data)
 		step_dir = calc_ray_step_direction(ray_dir);
 		ray_dist_to_side = calc_ray_dist_to_side(data, ray_dir, ray_pos,
 										   ray_step_dist);
-		// DDA part
 		wall_side = cast_ray(&ray_dist_to_side, ray_step_dist, ray_pos, step_dir);
-		perpendicular_wall_dist = calc_perp_wall_dist(wall_side,
-												ray_dist_to_side,
+		perp_wall_dist = calc_perp_wall_dist(wall_side, ray_dist_to_side,
 												ray_step_dist);
-		draw_wall_column(image, cur_screen_col, wall_side, data, perpendicular_wall_dist);
+		draw_wall_column(image, cur_screen_col, wall_side, data, perp_wall_dist);
 		cur_screen_col++;
 	}
 }
