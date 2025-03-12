@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:04:23 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/12 11:24:34 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/12 11:27:07 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,6 @@ typedef struct s_map_line
 	struct s_map_line	*next;
 	struct s_map_line	*previous;
 }	t_map_line;
-
-typedef struct s_rbg 
-{
-	unsigned int r;
-	unsigned int g;
-	unsigned int b; 
-}	t_rgb;
 
 typedef struct s_point_double
 {
@@ -54,6 +47,13 @@ typedef struct s_draw
 	t_point_double	player_dir;
 	t_point_double	camera_plane;
 } t_draw;
+
+typedef struct s_rbg 
+{
+	unsigned int r;
+	unsigned int g;
+	unsigned int b; 
+}	t_rgb;
 
 typedef struct s_input
 {
