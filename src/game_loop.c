@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:33:57 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/12 13:29:17 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/12 15:14:38 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,131 +68,194 @@ int	testMap2[24][24] =
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 };
 
+static t_point_double	calc_ray_direction(t_draw *data, int cur_screen_col)
+{
+	t_point_double	ray_dir;
+	double			camera_x;
+
+	camera_x = 2 * cur_screen_col / (double) data->image_width - 1;
+	ray_dir.x = data->player_dir.x + data->camera_plane.x * camera_x;
+	ray_dir.y = data->player_dir.y + data->camera_plane.y * camera_x;
+	return (ray_dir);
+}
+
+// step distance between tile boundaries
+// setting to 1e30 (an arbitrary very large number) avoids division by zero
+static t_point_double	calc_ray_step_distance(t_point_double ray_dir)
+{
+	t_point_double	ray_step_dist;
+
+	if (ray_dir.x == 0)
+	{
+		ray_step_dist.x = 1e30; 
+	}
+	else
+	{
+		// ray_step_dist.x = sqrt(1 + (ray_dir.y * ray_dir.y) / (ray_dir.x * ray_dir.x));
+		ray_step_dist.x = fabs(1/ray_dir.x);
+	}
+	if (ray_dir.y == 0)
+	{
+		ray_step_dist.y = 1e30;
+	}
+	else
+	{
+		// ray_step_dist.y = sqrt(1 + (ray_dir.x * ray_dir.x) / (ray_dir.y * ray_dir.y));
+		ray_step_dist.y = fabs(1/ray_dir.y);
+	}
+	return (ray_step_dist);
+}
+
+// are we moving is positive or negative direction on the axis?
+static t_point_int	calc_ray_step_direction(t_point_double ray_dir)
+{
+	t_point_int		step_dir;
+
+	if (ray_dir.x < 0)
+	{
+		step_dir.x = -1;
+	}
+	else
+	{
+		step_dir.x = 1;
+	}
+	if (ray_dir.y < 0)
+	{
+		step_dir.y = -1;
+	}
+	else
+	{
+		step_dir.y = 1;
+	}
+	return (step_dir);
+}
+
+static t_point_double	calc_ray_dist_to_side(t_draw *data,
+										   t_point_double ray_dir,
+										   t_point_int ray_pos,
+										   t_point_double ray_step_dist)
+{
+	t_point_double	ray_dist_to_side;
+
+	if (ray_dir.x < 0)
+	{
+		ray_dist_to_side.x = (data->player_pos.x - ray_pos.x) * ray_step_dist.x;
+	}
+	else
+	{
+		ray_dist_to_side.x = (ray_pos.x + 1.0 - data->player_pos.x)
+			* ray_step_dist.x;
+	}
+	if (ray_dir.y < 0)
+	{
+		ray_dist_to_side.y = (data->player_pos.y - ray_pos.y) * ray_step_dist.y;
+	}
+	else
+	{
+		ray_dist_to_side.y = (ray_pos.y + 1.0 - data->player_pos.y)
+			* ray_step_dist.y;
+	}
+	return (ray_dist_to_side);
+}
+
+// returns the side of the wall that has been hit
+// also increments ray_dist_to_side for later
+// TODO: proofing against infinite loop here?
+static	int	cast_ray(t_point_double *ray_dist_to_side,
+					t_point_double ray_step_dist, t_point_int ray_pos,
+					t_point_int step_dir)
+{
+	int	wall_side;
+
+	wall_side = 0;
+	while (true)
+	{
+		if (ray_dist_to_side->x < ray_dist_to_side->y)
+		{
+			ray_dist_to_side->x += ray_step_dist.x;
+			ray_pos.x += step_dir.x;
+			wall_side = 0;
+		}
+		else
+		{
+			ray_dist_to_side->y += ray_step_dist.y;
+			ray_pos.y += step_dir.y;
+			wall_side = 1;
+		}
+		if (testMap[ray_pos.y][ray_pos.x] > 0)
+		{
+			return (wall_side);
+		}
+	}
+}
+
+// calculate distance of wall to camera plane, not to player. This
+// avoids fish-eye effect
+static double	calc_perp_wall_dist(int wall_side,
+								 t_point_double ray_dist_to_side,
+								 t_point_double ray_step_dist)
+{
+	if (wall_side == 0)
+	{
+		return (ray_dist_to_side.x - ray_step_dist.x);
+	}
+	else
+	{
+		return (ray_dist_to_side.y - ray_step_dist.y);
+	}
+}
+
+static void	draw_wall_column(mlx_image_t *image, int cur_screen_col, int wall_side,
+							 t_draw *data, double perpendicular_wall_dist)
+{
+	int	wall_heigth;
+	int	start_draw;
+	int	end_draw;
+	int	color;
+
+	wall_heigth = data->image_heigth / perpendicular_wall_dist;
+	start_draw = -wall_heigth / 2 + data->image_heigth / 2;
+	if (start_draw < 0)
+		start_draw = 0;
+	end_draw = wall_heigth / 2 + data->image_heigth /2;
+	if (end_draw > data->image_heigth)
+		end_draw = data->image_heigth -1;
+
+	if (wall_side == 0)
+		color = 0xFF0000FF;
+	else
+		color = 0x990000FF;
+	draw_vert_line(image, cur_screen_col, start_draw, end_draw, color);
+}
+
 static void	draw(mlx_image_t *image, t_draw *data)
 {
+	int				cur_screen_col;
+	t_point_double	ray_dir;
+	t_point_double	ray_step_dist;
+	t_point_int		ray_pos;
+	t_point_double	ray_dist_to_side;// distance to first tile side we encounter
+	t_point_int		step_dir;
+	int				wall_side;
+	double			perpendicular_wall_dist;
+
 	draw_floor_and_ceiling(image, data);
-	int	cur_screen_col = 0;
+	cur_screen_col = 0;
 	while (cur_screen_col < data->image_width)
 	{
-		double	camera_x = 2 * cur_screen_col / (double) data->image_width - 1;
-		t_point_double	ray_dir;
-		ray_dir.x = data->player_dir.x + data->camera_plane.x * camera_x;
-		ray_dir.y = data->player_dir.y + data->camera_plane.y * camera_x;
-
-		// which tile we're in
-		t_point_int	ray_pos;
 		ray_pos.x = (int) data->player_pos.x;
 		ray_pos.y = (int) data->player_pos.y;
-
-		// distance to first tile side we encounter
-		t_point_double	ray_dist_to_side;
-
-		// step distance between tile boundaries
-		t_point_double	ray_step_dist;
-
-		if (ray_dir.x == 0)//to avoid divison by zero
-		{
-			ray_step_dist.x = 1e30; 
-		}
-		else
-		{
-			//can be simplified
-			// ray_step_dist.x = sqrt(1 + (ray_dir.y * ray_dir.y) / (ray_dir.x * ray_dir.x));
-			ray_step_dist.x = fabs(1/ray_dir.x);
-		}
-		if (ray_dir.y == 0)//to avoid divison by zero
-		{
-			ray_step_dist.y = 1e30;
-		}
-		else
-		{
-			// can be simplified
-			// ray_step_dist.y = sqrt(1 + (ray_dir.x * ray_dir.x) / (ray_dir.y * ray_dir.y));
-			ray_step_dist.y = fabs(1/ray_dir.y);
-		}
-
-		// are we moving is positive or negative direction on the axis?
-		t_point_int step_dir;
-		if (ray_dir.x < 0)
-		{
-			step_dir.x = -1;
-			ray_dist_to_side.x = (data->player_pos.x - ray_pos.x) * ray_step_dist.x;
-		}
-		else
-		{
-			step_dir.x = 1;
-			ray_dist_to_side.x = (ray_pos.x + 1.0 - data->player_pos.x) * ray_step_dist.x;
-		}
-		if (ray_dir.y < 0)
-		{
-			step_dir.y = -1;
-			ray_dist_to_side.y = (data->player_pos.y - ray_pos.y) * ray_step_dist.y;
-		}
-		else
-		{
-			step_dir.y = 1;
-			ray_dist_to_side.y = (ray_pos.y + 1.0 - data->player_pos.y) * ray_step_dist.y;
-		}
-	
+		ray_dir = calc_ray_direction(data, cur_screen_col);
+		ray_step_dist = calc_ray_step_distance(ray_dir);
+		step_dir = calc_ray_step_direction(ray_dir);
+		ray_dist_to_side = calc_ray_dist_to_side(data, ray_dir, ray_pos,
+										   ray_step_dist);
 		// DDA part
-		bool	wall_hit;
-		int		wall_side;
-
-		wall_hit = false;
-		while (wall_hit == false)
-		{
-			if (ray_dist_to_side.x < ray_dist_to_side.y)
-			{
-				ray_dist_to_side.x += ray_step_dist.x;
-				ray_pos.x += step_dir.x;
-				wall_side = 0;
-			}
-			else
-			{
-				ray_dist_to_side.y += ray_step_dist.y;
-				ray_pos.y += step_dir.y;
-				wall_side = 1;
-			}
-			if (testMap[ray_pos.y][ray_pos.x] > 0)
-			{
-				wall_hit = true;
-			}
-		}
-
-		// calculate distance of wall to camera plane, not to player. This
-		// avoid fish eye effect
-		double	perpendicular_wall_dist;
-		if (wall_side == 0)
-		{
-			perpendicular_wall_dist = ray_dist_to_side.x - ray_step_dist.x;
-		}
-		else
-		{
-			perpendicular_wall_dist = ray_dist_to_side.y - ray_step_dist.y;
-		}
-	
-		int wall_heigth;
-		wall_heigth = data->image_heigth / perpendicular_wall_dist;
-
-		int	start_draw;
-		start_draw = -wall_heigth / 2 + data->image_heigth / 2;
-		if (start_draw < 0)
-			start_draw = 0;
-		int	end_draw;
-		end_draw = wall_heigth / 2 + data->image_heigth /2;
-		if (end_draw > data->image_heigth)
-			end_draw = data->image_heigth -1;
-
-		int	color;
-		if (wall_side == 0)
-		{
-			color = 0xFF0000FF;
-		}
-		else
-		{
-			color = 0x990000FF;
-		}
-		draw_vert_line(image, cur_screen_col, start_draw, end_draw, color);
+		wall_side = cast_ray(&ray_dist_to_side, ray_step_dist, ray_pos, step_dir);
+		perpendicular_wall_dist = calc_perp_wall_dist(wall_side,
+												ray_dist_to_side,
+												ray_step_dist);
+		draw_wall_column(image, cur_screen_col, wall_side, data, perpendicular_wall_dist);
 		cur_screen_col++;
 	}
 }
@@ -222,7 +285,6 @@ static void	game_hook(void *param)
 	else if (mlx_is_key_down(mlx, MLX_KEY_W))
 	{
 		cam_move_fwd(data);
-		
 	}
 	else if (mlx_is_key_down(mlx, MLX_KEY_S))
 	{
@@ -276,6 +338,7 @@ void	start_graphics(int image_width, int image_heigth)
 	data.player_pos.y = 12;
 	data.player_dir.x = 1;
 	data.player_dir.y = 0;
+	// TODO: camera plane has to be calculated from player_dir
 	data.camera_plane.x = 0;
 	data.camera_plane.y = g_fov;
 
