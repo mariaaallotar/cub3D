@@ -6,7 +6,7 @@
 #    By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2025/03/11 12:22:06 by maheleni         ###   ########.fr        #
+#    Updated: 2025/03/12 14:01:39 by maheleni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ SRCDIR	:= ./src/
 OBJDIR	:= ./obj/
 
 SRCS	:= $(addprefix $(SRCDIR), main.c validate_args.c parse_file.c error.c memory.c colors.c \
-			color_parsing.c texture_parsing.c map_parsing.c)
+			color_parsing.c texture_parsing.c map_parsing.c map_validation.c)
 OBJS	:= ${SRCS:$(SRCDIR)%.c=$(OBJDIR)%.o}
 
 all: libft libmlx $(NAME)

@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:04:23 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/11 12:49:08 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/12 14:00:48 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,13 @@ enum e_errors
 	NOT_IDENTIFIER,
 	MAP_NOT_LAST,
 	INFO_MISSING,
-	IDENTIFIER_WITHOUT_VALUE
+	IDENTIFIER_WITHOUT_VALUE,
+	MULT_PLAYER,
+	WRONG_CHAR,
+	WALL_ERROR,
+	NO_PLAYER,
+	NEWLINE_IN_MAP,
+	PLAYER_OUTSIDE
 };
 
 enum e_location
@@ -35,6 +41,14 @@ enum e_location
 	FLOOR,
 	CEILING
 };
+
+typedef struct s_surrounding_chars
+{
+	char	left;
+	char	right;
+	char	up;
+	char	down;
+}	t_chars;
 
 typedef struct s_map_line
 {
@@ -94,7 +108,11 @@ int	set_wall_texture(char *type_identifier, char *texture,
 
 //map_parsing.c
 int	start_of_map(char **line, t_cub3D *main_struct);
-void	set_map(char *line, int fd, t_map_line **map);
+int	set_map(char *line, int fd, t_map_line **map);
+
+//map_validation.c
+int	validate_map(t_map_line **map);
+int	check_forbidden_chars(t_map_line *current, int *player_found);
 
 
 #endif

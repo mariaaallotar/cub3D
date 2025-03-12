@@ -6,38 +6,84 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 12:20:31 by maheleni          #+#    #+#             */
-/*   Updated: 2025/03/11 12:20:52 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/12 13:59:25 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
 
-void	init_map_line(t_map_line *current, char *line, t_map_line *previous)
+int	set_map_line(t_map_line *current, char *line, t_map_line *previous,
+	int *player_found)
 {
+	int	return_value;
+
 	current->line = line;
 	current->length = ft_strlen(line);
+	if (line[current->length - 1] == '\n')
+		current->length--;
 	current->previous = previous;
 	current->next = NULL;
+	return_value = check_forbidden_chars(current, player_found);
+	if (return_value < 0)
+		return (return_value);
+	return (1);
 }
 
-void	set_map(char *line, int fd, t_map_line **map)
+int	rest_is_whitespace(int fd)
+{
+	char	*line;
+
+	line = get_next_line(fd);
+	while (line != NULL)
+	{
+		if (*(skip_whitespace(line)) != '\0')
+		{
+			free(line);
+			return (0);
+		}
+		free(line);
+		line = get_next_line(fd);
+	}
+	return (1);
+}
+
+int	set_map(char *line, int fd, t_map_line **map)
 {
 	t_map_line	*current;
 	t_map_line	*previous;
+	int			player_found;
+	int			return_value;
 
+	player_found = 0;
 	previous = NULL;
 	while (line != NULL)
 	{
+		if (*(skip_whitespace(line)) == '\0')
+		{
+			free(line);
+			if (rest_is_whitespace(fd))
+				break ;
+			return (NEWLINE_IN_MAP);
+		}
 		current = malloc (sizeof(t_map_line));
-		//check fail
+		if (current == NULL)
+			return (-1);
 		if (previous != NULL)
 			previous->next = current;
-		init_map_line(current, line, previous);
+		return_value = set_map_line(current, line, previous, &player_found);
+		if (return_value < 0)
+			return (return_value);
 		if (*map == NULL)
 			*map = current;
 		previous = current;
 		line = get_next_line(fd);
 	}
+	if (player_found == 0)
+		return (NO_PLAYER);
+	return_value = validate_map(map);
+	if (return_value < 0)
+		return (return_value);
+	return (1);
 }
 
 int	start_of_map(char **line, t_cub3D *main_struct)

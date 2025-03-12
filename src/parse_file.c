@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 11:00:53 by maheleni          #+#    #+#             */
-/*   Updated: 2025/03/11 13:14:15 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/12 14:10:28 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	parse_split_line(char **split_line, t_cub3D *main_struct)
 	return_value = set_wall_texture(split_line[0], split_line[1], main_struct);
 	if (return_value < 0)
 		return (return_value);
-	if (split_line[2] != NULL)
+	if (split_line[2] != NULL && split_line[2][0] != '\n')
 		return (EXTRA_VALUE);
 	return (1);
 }
@@ -56,9 +56,26 @@ void	parse_file(int fd, t_cub3D *main_struct)
 			{
 				free(line);
 				free_everything(main_struct, &map);
+				close(fd);
 				error_and_exit(MAP_NOT_LAST);
 			}
-			set_map(line, fd, &map);
+			return_value = set_map(line, fd, &map);
+			if (return_value < 0)
+			{
+				if (map == NULL)
+				{
+					free(line);
+					free_everything(main_struct, NULL);
+					close(fd);
+					error_and_exit(return_value);
+				}
+				else
+				{
+					free_everything(main_struct, &map);
+					close(fd);
+					error_and_exit(return_value);
+				}
+			}
 			break ;
 		}
 		split_line = ft_split(line, ' ');
@@ -68,6 +85,7 @@ void	parse_file(int fd, t_cub3D *main_struct)
 		{
 			split_free(split_line, 0);
 			free_everything(main_struct, &map);
+			close(fd);
 			error_and_exit(return_value);
 		}
 		split_free(split_line, 0);
@@ -79,11 +97,5 @@ void	parse_file(int fd, t_cub3D *main_struct)
 		free_everything(main_struct, &map);
 		error_and_exit(INFO_MISSING);
 	}
-	// return_value = validate_map(&map, main_struct);
-	// if (return_value < 0)
-	// {
-	// 	free_everything(main_struct, &map);
-	// 	error_and_exit(return_value);
-	// }
 	free_map_list(&map);
 }

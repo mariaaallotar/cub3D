@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 13:07:50 by maheleni          #+#    #+#             */
-/*   Updated: 2025/03/11 12:50:01 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/12 12:34:51 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,18 @@ void	error_and_exit(int return_value)
 		ft_putstr_fd("Error: file does not have all necessary information\n", 2);
 	else if (return_value == IDENTIFIER_WITHOUT_VALUE)
 		ft_putstr_fd("Error: every identifer needs a value\n", 2);
+	else if (return_value == WRONG_CHAR)
+		ft_putstr_fd("Error: unexpected character in map\n", 2);
+	else if (return_value == WALL_ERROR)
+		ft_putstr_fd("Error: map not surrounded by walls\n", 2);
+	else if (return_value == MULT_PLAYER)
+		ft_putstr_fd("Error: multiple players found\n", 2);
+	else if (return_value == NO_PLAYER)
+		ft_putstr_fd("Error: no player in map\n", 2);
+	else if (return_value == NEWLINE_IN_MAP)
+		ft_putstr_fd("Error: map has an empty line\n", 2);
+	else if (return_value == PLAYER_OUTSIDE)
+		ft_putstr_fd("Error: player must be inside of map\n", 2);
 	else
 		ft_putstr_fd("Error: something went wrong\n", 2);
 	exit(1);
