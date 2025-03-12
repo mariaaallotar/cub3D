@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:33:57 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/12 13:24:01 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/12 13:29:17 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,7 +277,7 @@ void	start_graphics(int image_width, int image_heigth)
 	data.player_dir.x = 1;
 	data.player_dir.y = 0;
 	data.camera_plane.x = 0;
-	data.camera_plane.y = 0.66;
+	data.camera_plane.y = g_fov;
 
 	draw(image, &data);
 	mlx_loop_hook(mlx, game_hook, &data);
