@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game_loop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:33:57 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/11 18:01:27 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/12 16:46:58 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,11 +199,13 @@ static void	draw(mlx_image_t *image, t_draw *data)
 
 static void	game_hook(void *param)
 {
+	t_cub3D		*main_struct;
 	t_draw		*data;
 	mlx_t		*mlx;
 	mlx_image_t	*image;
 
-	data = param;
+	main_struct = param;
+	data = &(main_struct->draw);
 	mlx = data->mlx;
 	image = data->image;
 	if (mlx_is_key_down(mlx, MLX_KEY_ESCAPE))
@@ -276,11 +278,10 @@ static void	game_hook(void *param)
 	draw(image, data);
 }
 
-void	start_graphics(int image_width, int image_heigth)
+void	start_graphics(int image_width, int image_heigth, t_cub3D *main_struct)
 {
 	mlx_t		*mlx;
 	mlx_image_t	*image;
-	t_draw		draw;
 
 	mlx = mlx_init(image_width, image_heigth, "cub3D", true);
 	// if (!mlx)
@@ -296,18 +297,14 @@ void	start_graphics(int image_width, int image_heigth)
 		mlx_close_window(mlx);
 		// fdf_cleanup_exit(map);
 	}
-	draw.mlx = mlx;
-	draw.image = image;
-	draw.image_width = image_width;
-	draw.image_heigth = image_heigth;
-	draw.player_pos.x = 5;
-	draw.player_pos.y = 12;
-	draw.player_dir.x = 1;
-	draw.player_dir.y = 0;
-	draw.camera_plane.x = 0;
-	draw.camera_plane.y = 0.66;
+	main_struct->draw.mlx = mlx;
+	main_struct->draw.image = image;
+	main_struct->draw.image_width = image_width;
+	main_struct->draw.image_heigth = image_heigth;
+	main_struct->draw.camera_plane.x = 0;
+	main_struct->draw.camera_plane.y = 0.66;
 
-	mlx_loop_hook(mlx, game_hook, &draw);
+	mlx_loop_hook(mlx, game_hook, main_struct);
 	mlx_loop(mlx);
 	mlx_terminate(mlx);
 }

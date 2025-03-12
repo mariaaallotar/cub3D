@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:04:23 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/12 15:01:45 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/12 16:24:50 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ typedef struct s_input
 typedef struct s_cub3D
 {
 	t_input input;
+	t_draw	draw;		//pointer?
 }	t_cub3D;
 
 //validate_args.c
@@ -114,7 +115,7 @@ void    parse_file(int fd, t_cub3D *main_struct);
 //colors.c
 int32_t convert_color(int32_t r, int32_t g, int32_t b, int32_t a);
 //game_loop.c
-void	start_graphics(int image_width, int image_heigth);
+void	start_graphics(int image_width, int image_heigth, t_cub3D *main_struct);
 
 //draw_tools.c
 void	 draw_vert_line(mlx_image_t *image, int x, int start_y, int end_y, \
@@ -138,11 +139,11 @@ int	set_wall_texture(char *type_identifier, char *texture,
 
 //map_parsing.c
 int	start_of_map(char **line, t_cub3D *main_struct);
-int	set_map(char *line, int fd, t_map_line **map);
+int	set_map(char *line, int fd, t_map_line **map, t_cub3D *main_struct);
 
 //map_validation.c
 int	validate_map(t_map_line **map);
-int	check_forbidden_chars(t_map_line *current, int *player_found);
+int	check_forbidden_chars(t_map_line *current, t_cub3D *main_struct);
 
 
 #endif

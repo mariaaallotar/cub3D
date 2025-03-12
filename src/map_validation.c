@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 13:58:48 by maheleni          #+#    #+#             */
-/*   Updated: 2025/03/12 14:01:25 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/12 16:49:15 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,51 @@ int	validate_map(t_map_line **map)
 	return (1);
 }
 
-int	check_forbidden_chars(t_map_line *current, int *player_found)
+void	set_player_direction(char direction, t_cub3D *main_struct)
+{
+	int	x;
+	int	y;
+
+	if (direction == 'N')
+	{
+		x = 0;
+		y = -1;
+	}
+	else if (direction == 'E')
+	{
+		x = 1;
+		y = 0;
+	}
+	else if (direction == 'S')
+	{
+		x = 0;
+		y = 1;
+	}
+	else
+	{
+		x = -1;
+		y = 0;
+	}
+	main_struct->draw.player_dir.x = x;
+	main_struct->draw.player_dir.y = y;
+}
+
+void	set_player(t_map_line *current, t_cub3D *main_struct, int i,
+	char direction)
+{
+	main_struct->draw.player_pos.x = i;
+	i = 0;
+	while (current->previous != NULL)
+	{
+		i++;
+		current = current->previous;
+	}
+	main_struct->draw.player_pos.y = i;
+	set_player_direction(direction, main_struct);
+	
+}
+
+int	check_forbidden_chars(t_map_line *current, t_cub3D *main_struct)
 {
 	int		i;
 	char	c;
@@ -113,8 +157,9 @@ int	check_forbidden_chars(t_map_line *current, int *player_found)
 		c = current->line[i];
 		if (c == 'N' || c == 'E' || c == 'S' || c == 'W')
 		{
-			if (*player_found == 0)		//TODO this will be player position
-				(*player_found)++;
+			if ((int)main_struct->draw.player_dir.x == 0 &&
+				(int)main_struct->draw.player_dir.y == 0)
+				set_player(current, main_struct, i, c);
 			else
 				return (MULT_PLAYER);
 		}

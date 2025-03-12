@@ -6,14 +6,14 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 12:20:31 by maheleni          #+#    #+#             */
-/*   Updated: 2025/03/12 13:59:25 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/12 15:33:43 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
 
 int	set_map_line(t_map_line *current, char *line, t_map_line *previous,
-	int *player_found)
+	t_cub3D *main_struct)
 {
 	int	return_value;
 
@@ -23,7 +23,7 @@ int	set_map_line(t_map_line *current, char *line, t_map_line *previous,
 		current->length--;
 	current->previous = previous;
 	current->next = NULL;
-	return_value = check_forbidden_chars(current, player_found);
+	return_value = check_forbidden_chars(current, main_struct);
 	if (return_value < 0)
 		return (return_value);
 	return (1);
@@ -47,14 +47,12 @@ int	rest_is_whitespace(int fd)
 	return (1);
 }
 
-int	set_map(char *line, int fd, t_map_line **map)
+int	set_map(char *line, int fd, t_map_line **map, t_cub3D *main_struct)
 {
 	t_map_line	*current;
 	t_map_line	*previous;
-	int			player_found;
 	int			return_value;
 
-	player_found = 0;
 	previous = NULL;
 	while (line != NULL)
 	{
@@ -70,7 +68,7 @@ int	set_map(char *line, int fd, t_map_line **map)
 			return (-1);
 		if (previous != NULL)
 			previous->next = current;
-		return_value = set_map_line(current, line, previous, &player_found);
+		return_value = set_map_line(current, line, previous, main_struct);
 		if (return_value < 0)
 			return (return_value);
 		if (*map == NULL)
@@ -78,7 +76,8 @@ int	set_map(char *line, int fd, t_map_line **map)
 		previous = current;
 		line = get_next_line(fd);
 	}
-	if (player_found == 0)
+	if (main_struct->draw.player_dir.x == 0 &&
+		main_struct->draw.player_dir.y == 0)
 		return (NO_PLAYER);
 	return_value = validate_map(map);
 	if (return_value < 0)

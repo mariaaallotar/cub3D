@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 11:00:53 by maheleni          #+#    #+#             */
-/*   Updated: 2025/03/12 14:10:28 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/12 15:17:07 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	parse_file(int fd, t_cub3D *main_struct)
 				close(fd);
 				error_and_exit(MAP_NOT_LAST);
 			}
-			return_value = set_map(line, fd, &map);
+			return_value = set_map(line, fd, &map, main_struct);
 			if (return_value < 0)
 			{
 				if (map == NULL)
