@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:04:23 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/12 11:27:07 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/12 12:04:06 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,11 @@
 # include "../lib/MLX42/include/MLX42/MLX42.h"
 # include <math.h>
 # include <stdio.h>
+
+// how many radians to turn on one keypress
+const static double	g_cam_turn_speed = 0.02;
+// how many tiles to walk on one keypress
+const static double	g_player_walk_speed = 0.1;
 
 typedef struct s_map_line
 {
@@ -88,4 +93,12 @@ void	 draw_vert_line(mlx_image_t *image, int x, int start_y, int end_y, \
 						uint32_t color);
 void	draw_floor_and_ceiling(mlx_image_t *image, t_draw *data);
 
+//cam_move.c
+void	cam_move_fwd(t_draw *data);
+void	cam_move_back(t_draw *data);
+void	cam_strafe_left(t_draw *data);
+void	cam_strafe_right(t_draw *data);
+//cam_turn.c
+void	cam_turn_left(t_draw *data);
+void	cam_turn_right(t_draw *data);
 #endif

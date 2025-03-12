@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:33:57 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/11 18:01:27 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/12 13:24:01 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,64 +207,36 @@ static void	game_hook(void *param)
 	mlx = data->mlx;
 	image = data->image;
 	if (mlx_is_key_down(mlx, MLX_KEY_ESCAPE))
+	{
 		mlx_close_window(mlx);
-	draw(image, data);
-
-	double angle = 0.02;
+		return ;
+	}
 	if (mlx_is_key_down(mlx, MLX_KEY_LEFT))
 	{
-		double new_x;
-		double new_y;
-		new_x = data->player_dir.x * cos(-angle) - data->player_dir.y * sin(-angle);
-		new_y = data->player_dir.x * sin(-angle) + data->player_dir.y * cos(-angle);
-		data->player_dir.x = new_x;
-		data->player_dir.y = new_y;
-
-		new_x = data->camera_plane.x * cos(-angle) - data->camera_plane.y * sin(-angle);
-		new_y = data->camera_plane.x * sin(-angle) + data->camera_plane.y * cos(-angle);
-		// printf("x: %f, y: %f\n", new_x, new_y);
-		data->camera_plane.x = new_x;
-		data->camera_plane.y = new_y;
-
-
+		cam_turn_left(data);
 	}
 	else if (mlx_is_key_down(mlx, MLX_KEY_RIGHT))
 	{
-		double new_x;
-		double new_y;
-		new_x = data->player_dir.x * cos(angle) - data->player_dir.y * sin(angle);
-		new_y = data->player_dir.x * sin(angle) + data->player_dir.y * cos(angle);
-		// printf("x: %f, y: %f\n", new_x, new_y);
-		data->player_dir.x = new_x;
-		data->player_dir.y = new_y;
-
-		new_x = data->camera_plane.x * cos(angle) - data->camera_plane.y * sin(angle);
-		new_y = data->camera_plane.x * sin(angle) + data->camera_plane.y * cos(angle);
-		// printf("x: %f, y: %f\n", new_x, new_y);
-		data->camera_plane.x = new_x;
-		data->camera_plane.y = new_y;
+		cam_turn_right(data);
 	}
 	else if (mlx_is_key_down(mlx, MLX_KEY_W))
 	{
-		data->player_pos.y += data->player_dir.y * 0.1;
-		data->player_pos.x += data->player_dir.x * 0.1;
+		cam_move_fwd(data);
 		
 	}
 	else if (mlx_is_key_down(mlx, MLX_KEY_S))
 	{
-		data->player_pos.y -= data->player_dir.y *0.1;
-		data->player_pos.x -= data->player_dir.x *0.1;
+		cam_move_back(data);
 	}
 	else if (mlx_is_key_down(mlx, MLX_KEY_A))
 	{
-		data->camera_plane.y += data->camera_plane.y * 0.1;
-		data->camera_plane.x += data->camera_plane.x * 0.1;
+		cam_strafe_left(data);
 	}
 	else if (mlx_is_key_down(mlx, MLX_KEY_D))
 	{
-		data->camera_plane.y -= data->camera_plane.y * 0.1;
-		data->camera_plane.x -= data->camera_plane.x * 0.1;
+		cam_strafe_right(data);
 	}
+	// prevent player from escaping map
 	if (data->player_pos.x < 1)
 		data->player_pos.x = 1;
 	if (data->player_pos.x > 22)
@@ -280,7 +252,7 @@ void	start_graphics(int image_width, int image_heigth)
 {
 	mlx_t		*mlx;
 	mlx_image_t	*image;
-	t_draw		draw;
+	t_draw		data;
 
 	mlx = mlx_init(image_width, image_heigth, "cub3D", true);
 	// if (!mlx)
@@ -296,18 +268,19 @@ void	start_graphics(int image_width, int image_heigth)
 		mlx_close_window(mlx);
 		// fdf_cleanup_exit(map);
 	}
-	draw.mlx = mlx;
-	draw.image = image;
-	draw.image_width = image_width;
-	draw.image_heigth = image_heigth;
-	draw.player_pos.x = 5;
-	draw.player_pos.y = 12;
-	draw.player_dir.x = 1;
-	draw.player_dir.y = 0;
-	draw.camera_plane.x = 0;
-	draw.camera_plane.y = 0.66;
+	data.mlx = mlx;
+	data.image = image;
+	data.image_width = image_width;
+	data.image_heigth = image_heigth;
+	data.player_pos.x = 5;
+	data.player_pos.y = 12;
+	data.player_dir.x = 1;
+	data.player_dir.y = 0;
+	data.camera_plane.x = 0;
+	data.camera_plane.y = 0.66;
 
-	mlx_loop_hook(mlx, game_hook, &draw);
+	draw(image, &data);
+	mlx_loop_hook(mlx, game_hook, &data);
 	mlx_loop(mlx);
 	mlx_terminate(mlx);
 }
