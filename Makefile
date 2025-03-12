@@ -6,7 +6,7 @@
 #    By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2025/03/12 12:00:46 by lemercie         ###   ########.fr        #
+#    Updated: 2025/03/12 17:34:10 by lemercie         ###   ########.fr        #
 #    Updated: 2025/03/11 18:02:41 by lemercie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
@@ -43,7 +43,7 @@ libft:
 $(NAME): $(OBJS) ./include/cub3D.h
 	$(CC) $(OBJS) $(LIBS) $(LIBFT)/libft.a $(HEADERS) -o $(NAME)
 
-$(OBJDIR)%.o: $(SRCDIR)%.c
+$(OBJDIR)%.o: $(SRCDIR)%.c ./include/cub3D.h
 	@mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS) 
 
