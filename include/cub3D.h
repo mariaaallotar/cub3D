@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:04:23 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/12 14:00:48 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/12 15:01:45 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,29 @@ typedef struct s_map_line
 	struct s_map_line	*previous;
 }	t_map_line;
 
+typedef struct s_point_double
+{
+	double	x;
+	double	y;
+}	t_point_double;
+
+typedef struct s_point_int
+{
+	int	x;
+	int	y;
+}	t_point_int;
+
+typedef struct s_draw
+{
+	mlx_t			*mlx;
+	mlx_image_t		*image;
+	int				image_width;
+	int				image_heigth;
+	t_point_double	player_pos;
+	t_point_double	player_dir;
+	t_point_double	camera_plane;
+} t_draw;
+
 typedef struct s_rbg 
 {
 	int r;
@@ -90,6 +113,13 @@ void    parse_file(int fd, t_cub3D *main_struct);
 
 //colors.c
 int32_t convert_color(int32_t r, int32_t g, int32_t b, int32_t a);
+//game_loop.c
+void	start_graphics(int image_width, int image_heigth);
+
+//draw_tools.c
+void	 draw_vert_line(mlx_image_t *image, int x, int start_y, int end_y, \
+						uint32_t color);
+void	draw_floor_and_ceiling(mlx_image_t *image, t_draw *data);
 
 //memory.c
 void	free_everything(t_cub3D	*main_struct, t_map_line **map);
