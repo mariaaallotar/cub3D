@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:33:57 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/12 15:14:38 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/12 17:08:17 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,6 +228,19 @@ static void	draw_wall_column(mlx_image_t *image, int cur_screen_col, int wall_si
 	draw_vert_line(image, cur_screen_col, start_draw, end_draw, color);
 }
 
+// camera plane has to be perpendicular to player direction and have a magnitude
+// relative to the FOV
+static t_point_double	calc_camera_plane(t_point_double player_dir)
+{
+	t_point_double	camera_plane;
+	
+	camera_plane.x = -player_dir.y;
+	camera_plane.y = player_dir.x;
+	camera_plane.x *= g_fov;
+	camera_plane.y *= g_fov;
+	return (camera_plane);
+}
+
 static void	draw(mlx_image_t *image, t_draw *data)
 {
 	int				cur_screen_col;
@@ -243,6 +256,7 @@ static void	draw(mlx_image_t *image, t_draw *data)
 	cur_screen_col = 0;
 	while (cur_screen_col < data->image_width)
 	{
+		data->camera_plane = calc_camera_plane(data->player_dir);
 		ray_pos.x = (int) data->player_pos.x;
 		ray_pos.y = (int) data->player_pos.y;
 		ray_dir = calc_ray_direction(data, cur_screen_col);
@@ -338,9 +352,6 @@ void	start_graphics(int image_width, int image_heigth)
 	data.player_pos.y = 12;
 	data.player_dir.x = 1;
 	data.player_dir.y = 0;
-	// TODO: camera plane has to be calculated from player_dir
-	data.camera_plane.x = 0;
-	data.camera_plane.y = g_fov;
 
 	draw(image, &data);
 	mlx_loop_hook(mlx, game_hook, &data);
