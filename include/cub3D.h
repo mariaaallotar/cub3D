@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:04:23 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/12 17:34:55 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/13 17:02:26 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,39 @@
 # include "../lib/MLX42/include/MLX42/MLX42.h"
 # include <math.h>
 # include <stdio.h>
+# include <errno.h>
+
+enum e_errors
+{
+	DOUBLE_COLOR_ID = -100,
+	DOUBLE_WALL_ID,
+	WRONG_RGB_VALUE,
+	EXTRA_VALUE,
+	NOT_IDENTIFIER,
+	MAP_NOT_LAST,
+	INFO_MISSING,
+	IDENTIFIER_WITHOUT_VALUE,
+	MULT_PLAYER,
+	WRONG_CHAR,
+	WALL_ERROR,
+	NO_PLAYER,
+	NEWLINE_IN_MAP,
+	PLAYER_OUTSIDE
+};
+
+enum e_location
+{
+	FLOOR,
+	CEILING
+};
+
+typedef struct s_surrounding_chars
+{
+	char	left;
+	char	right;
+	char	up;
+	char	down;
+}	t_chars;
 
 // how many radians to turn on one keypress
 const static double	g_cam_turn_speed = 0.04;
@@ -57,26 +90,27 @@ typedef struct s_draw
 
 typedef struct s_rbg 
 {
-	unsigned int r;
-	unsigned int g;
-	unsigned int b; 
+	int r;
+	int g;
+	int b; 
 }	t_rgb;
 
 typedef struct s_input
 {
-	t_rgb   floor_color;
-	t_rgb   ceiling_color;
-	char    *no_texture;
-	char    *ea_texture;
-	char    *so_texture;
-	char    *we_texture;
-	t_map_line	*map;
-	//char    **map;
+	int				identifier_counter;
+	t_rgb			floor_color;
+	t_rgb			ceiling_color;
+	mlx_texture_t	*no_texture;
+	mlx_texture_t	*ea_texture;
+	mlx_texture_t	*so_texture;
+	mlx_texture_t	*we_texture;
+	char    		**map;
 }	t_input;
 
 typedef struct s_cub3D
 {
 	t_input input;
+	t_draw	draw;		//pointer?
 }	t_cub3D;
 
 //validate_args.c
@@ -88,7 +122,7 @@ void    parse_file(int fd, t_cub3D *main_struct);
 //colors.c
 int32_t convert_color(int32_t r, int32_t g, int32_t b, int32_t a);
 //game_loop.c
-void	start_graphics(int image_width, int image_heigth);
+void	start_graphics(int image_width, int image_heigth, t_cub3D *main_struct);
 
 //draw_tools.c
 void	 draw_vert_line(mlx_image_t *image, int x, int start_y, int end_y, \
@@ -103,4 +137,29 @@ void	cam_strafe_right(t_draw *data);
 //cam_turn.c
 void	cam_turn_left(t_draw *data);
 void	cam_turn_right(t_draw *data);
+//memory.c
+void	free_everything(t_cub3D	*main_struct, t_map_line **map);
+void	free_map_list(t_map_line **map);
+void	free_map_nodes(t_map_line **map);
+
+//error.c
+void	error_and_exit(int return_value);
+
+//color_parsing.c
+int	set_floor_ceiling(char *type_identifier, char *color_code,
+	t_cub3D *main_struct);
+
+//texture_parsing.c
+int	set_wall_texture(char *type_identifier, char *texture,
+	t_cub3D *main_struct);
+
+//map_parsing.c
+int	start_of_map(char **line, t_cub3D *main_struct);
+int	set_map(char *line, int fd, t_map_line **map, t_cub3D *main_struct);
+
+//map_validation.c
+int	validate_map(t_map_line **map);
+int	check_forbidden_chars(t_map_line *current, t_cub3D *main_struct);
+
+
 #endif

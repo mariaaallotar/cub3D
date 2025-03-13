@@ -6,20 +6,20 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 13:41:08 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/12 11:27:26 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/13 16:37:50 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
 
-static void	init_game()
+static void	init_game(t_cub3D *main_struct)
 {
 	int		image_width;
 	int		image_heigth;
 
 	image_width = 1280;
 	image_heigth = 1024;
-	start_graphics(image_width, image_heigth);
+	start_graphics(image_width, image_heigth, main_struct);
 }
 
 static int	open_file(char *filename)
@@ -48,6 +48,7 @@ void	init_input_struct(t_input *input)
 	input->so_texture = NULL;
 	input->we_texture = NULL;
 	input->map = NULL;
+	input->identifier_counter = 0;
 }
 
 void	init_main_struct(t_cub3D *main_struct)
@@ -56,54 +57,9 @@ void	init_main_struct(t_cub3D *main_struct)
 
 	init_input_struct(&input);
 	main_struct->input = input;
-}
-
-void	print_input_struct(t_cub3D main_struct)
-{
-	printf("NO %s\n", main_struct.input.no_texture);
-	printf("EA %s\n", main_struct.input.ea_texture);
-	printf("SO %s\n", main_struct.input.so_texture);
-	printf("WE %s\n", main_struct.input.we_texture);
-	printf("F %i,%i,%i\n", main_struct.input.floor_color.r,
-		main_struct.input.floor_color.g,
-		main_struct.input.floor_color.b);
-	printf("C %i,%i,%i\n", main_struct.input.ceiling_color.r,
-		main_struct.input.ceiling_color.g,
-		main_struct.input.ceiling_color.b);
-	
-	t_map_line	*map_line = main_struct.input.map;
-	while (map_line != NULL)
-	{
-		printf("%s", map_line->line);
-		map_line = map_line->next;
-	}
-}
-
-void	free_map_list(t_map_line *map)
-{
-	t_map_line *current;
-
-	current = map;
-	while (current != NULL)
-	{
-		free(current->line);
-		if (current->next == NULL)
-		{
-			free(current);
-			break ;
-		}
-		current = current->next;
-		free(current->previous);
-	}
-}
-
-void	free_everything(t_cub3D	*main_struct)
-{
-	free(main_struct->input.no_texture);
-	free(main_struct->input.ea_texture);
-	free(main_struct->input.so_texture);
-	free(main_struct->input.we_texture);
-	free_map_list(main_struct->input.map);
+	main_struct->draw.player_dir.x = 0;
+	main_struct->draw.player_dir.y = 0;
+	main_struct->input.map = NULL;
 }
 
 int	main(int argc, char **argv)
@@ -115,8 +71,7 @@ int	main(int argc, char **argv)
 	fd = open_file(argv[1]);
 	init_main_struct(&main_struct);
 	parse_file(fd, &main_struct);
-	print_input_struct(main_struct);
-	init_game(); 
-	free_everything(&main_struct);
+	init_game(&main_struct);
+	free_everything(&main_struct, NULL);
 	return (0);
 }

@@ -3,79 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   game_loop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:33:57 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/13 16:04:24 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/13 17:23:36 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
 
-int	testMap[24][24] = 
-{
-  {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,2,2,2,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
-  {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,3,0,0,0,3,0,0,0,1},
-  {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,2,2,0,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,0,0,0,5,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
-};
-
-int	testMap2[24][24] = 
-{
-  {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
-};
-
-int	testMap3[5][9] = 
-{
-	{1,1,1,1,1,1,1,1,1},
-	{1,0,0,0,0,0,0,0,1},
-	{1,0,0,0,1,0,0,0,1},
-	{1,0,0,0,0,0,0,0,1},
-	{1,1,1,1,1,1,1,1,1}
-};
 static t_point_double	calc_ray_direction(t_draw *data, int cur_screen_col)
 {
 	t_point_double	ray_dir;
@@ -173,7 +109,7 @@ static t_point_double	calc_ray_dist_to_side(t_draw *data,
 // TODO: proofing against infinite loop here?
 static	int	cast_ray(t_point_double *ray_dist_to_side,
 					t_point_double ray_step_dist, t_point_int ray_pos,
-					t_point_int step_dir)
+					t_point_int step_dir, char **map)
 {
 	int	wall_side;
 
@@ -192,7 +128,7 @@ static	int	cast_ray(t_point_double *ray_dist_to_side,
 			ray_pos.y += step_dir.y;
 			wall_side = 1;
 		}
-		if (testMap3[ray_pos.y][ray_pos.x] > 0)
+		if (map[ray_pos.y][ray_pos.x] == '1')
 		{
 			return (wall_side);
 		}
@@ -251,7 +187,7 @@ static t_point_double	calc_camera_plane(t_point_double player_dir)
 	return (camera_plane);
 }
 
-static void	draw(mlx_image_t *image, t_draw *data)
+static void	draw(mlx_image_t *image, t_draw *data, t_cub3D *main_struct)
 {
 	int				cur_screen_col;
 	t_point_double	ray_dir;
@@ -274,7 +210,7 @@ static void	draw(mlx_image_t *image, t_draw *data)
 		step_dir = calc_ray_step_direction(ray_dir);
 		ray_dist_to_side = calc_ray_dist_to_side(data, ray_dir, ray_pos,
 										   ray_step_dist);
-		wall_side = cast_ray(&ray_dist_to_side, ray_step_dist, ray_pos, step_dir);
+		wall_side = cast_ray(&ray_dist_to_side, ray_step_dist, ray_pos, step_dir, main_struct->input.map);
 		perp_wall_dist = calc_perp_wall_dist(wall_side, ray_dist_to_side,
 												ray_step_dist);
 		draw_wall_column(image, cur_screen_col, wall_side, data, perp_wall_dist);
@@ -284,11 +220,13 @@ static void	draw(mlx_image_t *image, t_draw *data)
 
 static void	game_hook(void *param)
 {
+	t_cub3D		*main_struct;
 	t_draw		*data;
 	mlx_t		*mlx;
 	mlx_image_t	*image;
 
-	data = param;
+	main_struct = param;
+	data = &(main_struct->draw);
 	mlx = data->mlx;
 	image = data->image;
 	if (mlx_is_key_down(mlx, MLX_KEY_ESCAPE))
@@ -296,6 +234,7 @@ static void	game_hook(void *param)
 		mlx_close_window(mlx);
 		return ;
 	}
+	draw(image, data, main_struct);
 	if (mlx_is_key_down(mlx, MLX_KEY_LEFT))
 	{
 		cam_turn_left(data);
@@ -329,14 +268,12 @@ static void	game_hook(void *param)
 		data->player_pos.y = 1;
 	if (data->player_pos.y > 22)
 		data->player_pos.y = 22;
-	draw(image, data);
 }
 
-void	start_graphics(int image_width, int image_heigth)
+void	start_graphics(int image_width, int image_heigth, t_cub3D *main_struct)
 {
 	mlx_t		*mlx;
 	mlx_image_t	*image;
-	t_draw		data;
 
 	mlx = mlx_init(image_width, image_heigth, "cub3D", true);
 	// if (!mlx)
@@ -352,17 +289,13 @@ void	start_graphics(int image_width, int image_heigth)
 		mlx_close_window(mlx);
 		// fdf_cleanup_exit(map);
 	}
-	data.mlx = mlx;
-	data.image = image;
-	data.image_width = image_width;
-	data.image_heigth = image_heigth;
-	data.player_pos.x = 2;
-	data.player_pos.y = 2;
-	data.player_dir.x = 1;
-	data.player_dir.y = 0;
-
-	draw(image, &data);
-	mlx_loop_hook(mlx, game_hook, &data);
+	main_struct->draw.mlx = mlx;
+	main_struct->draw.image = image;
+	main_struct->draw.image_width = image_width;
+	main_struct->draw.image_heigth = image_heigth;
+	main_struct->draw.camera_plane.x = 0;
+	main_struct->draw.camera_plane.y = 0.66;
+	mlx_loop_hook(mlx, game_hook, main_struct);
 	mlx_loop(mlx);
 	mlx_terminate(mlx);
 }
