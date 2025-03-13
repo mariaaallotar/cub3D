@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:04:23 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/13 17:02:26 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/13 17:45:39 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,13 +130,13 @@ void	 draw_vert_line(mlx_image_t *image, int x, int start_y, int end_y, \
 void	draw_floor_and_ceiling(mlx_image_t *image, t_draw *data);
 
 //cam_move.c
-void	cam_move_fwd(t_draw *data);
-void	cam_move_back(t_draw *data);
-void	cam_strafe_left(t_draw *data);
-void	cam_strafe_right(t_draw *data);
+void	cam_move_fwd(t_cub3D *main_struct);
+void	cam_move_back(t_cub3D *main_struct);
+void	cam_strafe_left(t_cub3D *main_struct);
+void	cam_strafe_right(t_cub3D *main_struct);
 //cam_turn.c
-void	cam_turn_left(t_draw *data);
-void	cam_turn_right(t_draw *data);
+void	cam_turn_left(t_cub3D *main_struct);
+void	cam_turn_right(t_cub3D *main_struct);
 //memory.c
 void	free_everything(t_cub3D	*main_struct, t_map_line **map);
 void	free_map_list(t_map_line **map);

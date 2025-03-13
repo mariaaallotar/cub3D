@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:05:39 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/12 13:11:33 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/13 17:47:02 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,12 @@ static void	cam_turn(t_draw *data, double angle)
 	data->camera_plane.y = new_y;
 }
 
-void	cam_turn_left(t_draw *data)
+void	cam_turn_left(t_cub3D *main_struct)
 {
-	cam_turn(data, -g_cam_turn_speed);
+	cam_turn(&main_struct->draw, -g_cam_turn_speed);
 }
 
-void	cam_turn_right(t_draw *data)
+void	cam_turn_right(t_cub3D *main_struct)
 {
-	cam_turn(data, g_cam_turn_speed);
+	cam_turn(&main_struct->draw, g_cam_turn_speed);
 }
