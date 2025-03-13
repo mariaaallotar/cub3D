@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 13:41:08 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/13 16:37:50 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/13 18:31:25 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,7 @@ static int	open_file(char *filename)
 
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
-	{
-		ft_putstr_fd("Error: Could not open file\n", 2);
-		exit (1);
-	}
+		error_and_exit(-1);
 	return (fd);
 }
 
@@ -53,10 +50,7 @@ void	init_input_struct(t_input *input)
 
 void	init_main_struct(t_cub3D *main_struct)
 {
-	t_input input;
-
-	init_input_struct(&input);
-	main_struct->input = input;
+	init_input_struct(&(main_struct->input));
 	main_struct->draw.player_dir.x = 0;
 	main_struct->draw.player_dir.y = 0;
 	main_struct->input.map = NULL;
