@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 12:18:38 by maheleni          #+#    #+#             */
-/*   Updated: 2025/03/11 13:12:53 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/13 19:40:37 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,10 @@ int	set_texture(char *texture, mlx_texture_t **texture_location_pointer)
 	*texture_location_pointer = mlx_load_png(texture);
 	free(texture);
 	if (*texture_location_pointer == NULL)
+	{
+		print_error_message(-1);
 		return (-1);
+	}
 	return (1);
 }
 
@@ -37,7 +40,7 @@ int	set_texture_location_pointer(char *type_identifier,
 		ft_strncmp("WE\n", type_identifier, 3) == 0)
 		*texture_location_pointer = &(main_struct->input.we_texture);
 	else
-		return (NOT_IDENTIFIER);
+		return (print_error_message(NOT_IDENTIFIER));
 	return (1);
 }
 
@@ -46,17 +49,15 @@ int	set_wall_texture(char *type_identifier, char *texture,
 {
 	mlx_texture_t	**texture_location_pointer;
 	char			*trimmed_texture;
-	int				return_value;
 
 	texture_location_pointer = NULL;
-	return_value = set_texture_location_pointer(type_identifier,
-		&texture_location_pointer, main_struct);
-	if (return_value < 0)
-		return (return_value);
+	if (set_texture_location_pointer(type_identifier,
+		&texture_location_pointer, main_struct) < 0)
+		return (-1);
 	if (*texture_location_pointer != NULL)
-		return (DOUBLE_WALL_ID);
+		return (print_error_message(DOUBLE_WALL_ID));
 	if (texture == NULL || *texture == '\n')
-		return(IDENTIFIER_WITHOUT_VALUE);
+		return(print_error_message(IDENTIFIER_WITHOUT_VALUE));
 	trimmed_texture = ft_strtrim(texture, "\n");
 	if (trimmed_texture == NULL)
 		return (-1);

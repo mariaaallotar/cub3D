@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 13:58:48 by maheleni          #+#    #+#             */
-/*   Updated: 2025/03/12 16:49:15 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/13 19:04:37 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	check_zero(t_map_line *current, int i)
 	get_chars(&chars, current, i);
 	if (chars.left == ' ' || chars.right == ' ' ||
 		chars.up == ' ' || chars.down == ' ')
-		return (WALL_ERROR);
+		return (print_error_message(WALL_ERROR));
 	return (1);
 }
 
@@ -50,7 +50,7 @@ int	check_player(t_map_line *current, int i)
 	get_chars(&chars, current, i);
 	if (chars.left == ' ' || chars.right == ' ' ||
 		chars.up == ' ' || chars.down == ' ')
-		return (WALL_ERROR);
+		return (print_error_message(WALL_ERROR));
 	return (1);
 }
 
@@ -58,7 +58,6 @@ int	validate_line(t_map_line *current)
 {
 	int		i;
 	char	c;
-	int		return_value;
 
 	i = 0;
 	while (current->line[i] != '\0' && current->line[i] != '\n')
@@ -66,37 +65,30 @@ int	validate_line(t_map_line *current)
 		c = current->line[i];
 		if (c == 'N' || c == 'E' || c == 'S' || c == 'W')
 		{
-			return_value = check_player(current, i);
-			if (return_value < 0)
-				return (return_value);
+			if (check_player(current, i) < 0)
+				return (-1);
 		}
 		else if (c == '0')
 		{
-			return_value = check_zero(current, i);
-			if (return_value < 0)
-				return (return_value);
+			if (check_zero(current, i) < 0)
+				return (-1);
 		}
 		else if (c != '1' && c != ' ')
-			return (WRONG_CHAR);
+			return (print_error_message(WRONG_CHAR));
 		i++;
 	}
 	return (1);
 }
 
-//TODO insted of returning an error number, have the functions call a error message function
-//and then just return -1. Would eliminate all return_value variables
-
 int	validate_map(t_map_line **map)
 {
 	t_map_line	*current;
-	int			return_value;
 	
 	current = *map;
 	while (current)
 	{
-		return_value = validate_line(current);
-		if (return_value < 0)
-			return (return_value);
+		if (validate_line(current) < 0)
+			return (-1);
 		current = current->next;
 	}
 	return (1);
@@ -161,10 +153,10 @@ int	check_forbidden_chars(t_map_line *current, t_cub3D *main_struct)
 				(int)main_struct->draw.player_dir.y == 0)
 				set_player(current, main_struct, i, c);
 			else
-				return (MULT_PLAYER);
+				return (print_error_message(MULT_PLAYER));
 		}
 		else if (c != '1' && c != '0' && c != ' ')
-			return (WRONG_CHAR);
+			return (print_error_message(WRONG_CHAR));
 		i++;
 	}
 	return (1);

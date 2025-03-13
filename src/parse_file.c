@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 11:00:53 by maheleni          #+#    #+#             */
-/*   Updated: 2025/03/13 18:31:14 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/13 19:34:55 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,18 @@
 
 int	parse_split_line(char **split_line, t_cub3D *main_struct)
 {
-	int	return_value;
-
 	if (split_line[0][0] == 'F' || split_line[0][0] == 'C')
 	{
-		return_value = set_floor_ceiling(split_line[0], split_line[1], main_struct);
-		if (return_value < 0)
-			return (return_value);
+		if (set_floor_ceiling(split_line[0], split_line[1], main_struct) < 0)
+			return (-1);
 		if (split_line[2] != NULL)
-			return (EXTRA_VALUE);
+			return (print_error_message(EXTRA_VALUE));
 		return (1);
 	}
-	return_value = set_wall_texture(split_line[0], split_line[1], main_struct);
-	if (return_value < 0)
-		return (return_value);
+	if (set_wall_texture(split_line[0], split_line[1], main_struct) < 0)
+		return (-1);
 	if (split_line[2] != NULL && split_line[2][0] != '\n')
-		return (EXTRA_VALUE);
+		return (print_error_message(EXTRA_VALUE));
 	return (1);
 }
 
@@ -70,7 +66,6 @@ void	parse_file(int fd, t_cub3D *main_struct)
 {
 	char		*line;
 	char		**split_line;
-	int			return_value;
 	t_map_line	*map;
 
 	map = NULL;
@@ -90,36 +85,35 @@ void	parse_file(int fd, t_cub3D *main_struct)
 				free(line);
 				free_everything(main_struct, &map);
 				close(fd);
-				error_and_exit(MAP_NOT_LAST);
+				print_error_message(MAP_NOT_LAST);
+				exit(1);
 			}
-			return_value = set_map(line, fd, &map, main_struct);
-			if (return_value < 0)
+			if (set_map(line, fd, &map, main_struct) < 0)
 			{
 				if (map == NULL)
 				{
 					free(line);
 					free_everything(main_struct, NULL);
 					close(fd);
-					error_and_exit(return_value);
+					exit(-1);
 				}
 				else
 				{
 					free_everything(main_struct, &map);
 					close(fd);
-					error_and_exit(return_value);
+					exit(-1);
 				}
 			}
 			break ;
 		}
 		split_line = ft_split(line, ' ');
 		free(line);
-		return_value = parse_split_line(split_line, main_struct);
-		if (return_value < 0)
+		if (parse_split_line(split_line, main_struct) < 0)
 		{
 			split_free(split_line, 0);
 			free_everything(main_struct, &map);
 			close(fd);
-			error_and_exit(return_value);
+			exit(1);
 		}
 		split_free(split_line, 0);
 		line = get_next_line(fd);
@@ -128,13 +122,13 @@ void	parse_file(int fd, t_cub3D *main_struct)
 	if (main_struct->input.identifier_counter != 6 || map == NULL)
 	{
 		free_everything(main_struct, &map);
-		error_and_exit(INFO_MISSING);
+		print_error_message(INFO_MISSING);
+		exit(1);
 	}
-	return_value = map_to_array(main_struct, map);
-	if (return_value < 0)
+	if (map_to_array(main_struct, map) < 0)
 	{
 		free_everything(main_struct, &map);
-		error_and_exit(-1);
+		exit(1);
 	}
 	free_map_nodes(&map);
 }

@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:04:23 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/13 17:45:39 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/13 18:58:05 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ void	free_map_list(t_map_line **map);
 void	free_map_nodes(t_map_line **map);
 
 //error.c
-void	error_and_exit(int return_value);
+int	print_error_message(int return_value);
 
 //color_parsing.c
 int	set_floor_ceiling(char *type_identifier, char *color_code,

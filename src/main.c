@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 13:41:08 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/13 18:31:25 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/13 19:00:30 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,10 @@ static int	open_file(char *filename)
 
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
-		error_and_exit(-1);
+	{
+		print_error_message(-1);
+		exit(1);
+	}
 	return (fd);
 }
 
