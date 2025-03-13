@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:33:57 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/13 17:23:36 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/13 17:56:06 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,37 +237,28 @@ static void	game_hook(void *param)
 	draw(image, data, main_struct);
 	if (mlx_is_key_down(mlx, MLX_KEY_LEFT))
 	{
-		cam_turn_left(data);
+		cam_turn_left(main_struct);
 	}
 	else if (mlx_is_key_down(mlx, MLX_KEY_RIGHT))
 	{
-		cam_turn_right(data);
+		cam_turn_right(main_struct);
 	}
 	else if (mlx_is_key_down(mlx, MLX_KEY_W))
 	{
-		cam_move_fwd(data);
+		cam_move_fwd(main_struct);
 	}
 	else if (mlx_is_key_down(mlx, MLX_KEY_S))
 	{
-		cam_move_back(data);
+		cam_move_back(main_struct);
 	}
 	else if (mlx_is_key_down(mlx, MLX_KEY_A))
 	{
-		cam_strafe_left(data);
+		cam_strafe_left(main_struct);
 	}
 	else if (mlx_is_key_down(mlx, MLX_KEY_D))
 	{
-		cam_strafe_right(data);
+		cam_strafe_right(main_struct);
 	}
-	// prevent player from escaping map
-	if (data->player_pos.x < 1)
-		data->player_pos.x = 1;
-	if (data->player_pos.x > 22)
-		data->player_pos.x = 22;
-	if (data->player_pos.y < 1)
-		data->player_pos.y = 1;
-	if (data->player_pos.y > 22)
-		data->player_pos.y = 22;
 }
 
 void	start_graphics(int image_width, int image_heigth, t_cub3D *main_struct)
