@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 11:00:53 by maheleni          #+#    #+#             */
-/*   Updated: 2025/03/12 15:17:07 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/13 16:37:04 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,39 @@ int	parse_split_line(char **split_line, t_cub3D *main_struct)
 		return (return_value);
 	if (split_line[2] != NULL && split_line[2][0] != '\n')
 		return (EXTRA_VALUE);
+	return (1);
+}
+
+int	count_rows(t_map_line *map)
+{
+	int	rows;
+
+	rows= 0;
+	while (map)
+	{
+		rows++;
+		map = map->next;
+	}
+	return (rows);
+}
+
+int	map_to_array(t_cub3D *main_struct, t_map_line *map)
+{
+	int	rows;
+	int	i;
+
+	rows= count_rows(map);
+	main_struct->input.map = malloc((rows + 1) * sizeof(char *));
+	if (main_struct->input.map == NULL)
+		return (-1);
+	i = 0;
+	while (map)
+	{
+		main_struct->input.map[i] = map->line;
+		map = map->next;
+		i++;
+	}
+	main_struct->input.map[i] = NULL;
 	return (1);
 }
 
@@ -97,5 +130,11 @@ void	parse_file(int fd, t_cub3D *main_struct)
 		free_everything(main_struct, &map);
 		error_and_exit(INFO_MISSING);
 	}
-	free_map_list(&map);
+	return_value = map_to_array(main_struct, map);
+	if (return_value < 0)
+	{
+		free_everything(main_struct, &map);
+		error_and_exit(-1);
+	}
+	free_map_nodes(&map);
 }

@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:33:57 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/12 16:46:58 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/13 16:36:56 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	testMap2[24][24] =
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 };
 
-static void	draw(mlx_image_t *image, t_draw *data)
+static void	draw(mlx_image_t *image, t_draw *data, t_cub3D *main_struct)
 {
 	draw_floor_and_ceiling(image, data);
 	int	cur_screen_col = 0;
@@ -153,7 +153,7 @@ static void	draw(mlx_image_t *image, t_draw *data)
 				ray_pos.y += step_dir.y;
 				wall_side = 1;
 			}
-			if (testMap[ray_pos.y][ray_pos.x] > 0)
+			if (main_struct->input.map[ray_pos.y][ray_pos.x] == '1')
 			{
 				wall_hit = true;
 			}
@@ -210,7 +210,7 @@ static void	game_hook(void *param)
 	image = data->image;
 	if (mlx_is_key_down(mlx, MLX_KEY_ESCAPE))
 		mlx_close_window(mlx);
-	draw(image, data);
+	draw(image, data, main_struct);
 
 	double angle = 0.02;
 	if (mlx_is_key_down(mlx, MLX_KEY_LEFT))
@@ -275,7 +275,7 @@ static void	game_hook(void *param)
 		data->player_pos.y = 1;
 	if (data->player_pos.y > 22)
 		data->player_pos.y = 22;
-	draw(image, data);
+	draw(image, data, main_struct);
 }
 
 void	start_graphics(int image_width, int image_heigth, t_cub3D *main_struct)
@@ -303,7 +303,6 @@ void	start_graphics(int image_width, int image_heigth, t_cub3D *main_struct)
 	main_struct->draw.image_heigth = image_heigth;
 	main_struct->draw.camera_plane.x = 0;
 	main_struct->draw.camera_plane.y = 0.66;
-
 	mlx_loop_hook(mlx, game_hook, main_struct);
 	mlx_loop(mlx);
 	mlx_terminate(mlx);

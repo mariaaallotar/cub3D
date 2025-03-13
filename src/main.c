@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 13:41:08 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/12 16:44:26 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/13 16:37:50 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,9 @@ void	init_main_struct(t_cub3D *main_struct)
 
 	init_input_struct(&input);
 	main_struct->input = input;
-}
-
-void	print_player(t_cub3D main_struct)
-{
-	printf("Player dir x: %f\n", main_struct.draw.player_dir.x);
-	printf("Player dir y: %f\n", main_struct.draw.player_dir.y);
-	printf("Player pos x: %f\n", main_struct.draw.player_pos.x);
-	printf("Player pos y: %f\n", main_struct.draw.player_pos.y);
+	main_struct->draw.player_dir.x = 0;
+	main_struct->draw.player_dir.y = 0;
+	main_struct->input.map = NULL;
 }
 
 int	main(int argc, char **argv)
@@ -76,7 +71,6 @@ int	main(int argc, char **argv)
 	fd = open_file(argv[1]);
 	init_main_struct(&main_struct);
 	parse_file(fd, &main_struct);
-	print_player(main_struct);		//only for debugging
 	init_game(&main_struct);
 	free_everything(&main_struct, NULL);
 	return (0);

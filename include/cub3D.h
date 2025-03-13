@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:04:23 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/12 16:24:50 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/13 16:19:46 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ void	draw_floor_and_ceiling(mlx_image_t *image, t_draw *data);
 //memory.c
 void	free_everything(t_cub3D	*main_struct, t_map_line **map);
 void	free_map_list(t_map_line **map);
+void	free_map_nodes(t_map_line **map);
 
 //error.c
 void	error_and_exit(int return_value);
