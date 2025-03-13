@@ -6,8 +6,7 @@
 #    By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2025/03/12 11:26:20 by lemercie         ###   ########.fr        #
-#    Updated: 2025/03/11 18:02:41 by lemercie         ###   ########.fr        #
+#    Updated: 2025/03/12 15:04:32 by maheleni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,8 +21,8 @@ LIBS	:= $(LIBMLX)/build/libmlx42.a -ldl -lglfw -pthread -lm
 SRCDIR	:= ./src/
 OBJDIR	:= ./obj/
 
-SRCS	:= $(addprefix $(SRCDIR), main.c validate_args.c parse_file.c colors.c \
-		   game_loop.c draw_tools.c)
+SRCS	:= $(addprefix $(SRCDIR), main.c validate_args.c parse_file.c error.c memory.c colors.c \
+			color_parsing.c texture_parsing.c map_parsing.c map_validation.c game_loop.c draw_tools.c)
 OBJS	:= ${SRCS:$(SRCDIR)%.c=$(OBJDIR)%.o}
 
 all: libft libmlx $(NAME)

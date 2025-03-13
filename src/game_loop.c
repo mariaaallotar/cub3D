@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game_loop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:33:57 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/11 18:01:27 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/13 16:36:56 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	testMap2[24][24] =
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 };
 
-static void	draw(mlx_image_t *image, t_draw *data)
+static void	draw(mlx_image_t *image, t_draw *data, t_cub3D *main_struct)
 {
 	draw_floor_and_ceiling(image, data);
 	int	cur_screen_col = 0;
@@ -153,7 +153,7 @@ static void	draw(mlx_image_t *image, t_draw *data)
 				ray_pos.y += step_dir.y;
 				wall_side = 1;
 			}
-			if (testMap[ray_pos.y][ray_pos.x] > 0)
+			if (main_struct->input.map[ray_pos.y][ray_pos.x] == '1')
 			{
 				wall_hit = true;
 			}
@@ -199,16 +199,18 @@ static void	draw(mlx_image_t *image, t_draw *data)
 
 static void	game_hook(void *param)
 {
+	t_cub3D		*main_struct;
 	t_draw		*data;
 	mlx_t		*mlx;
 	mlx_image_t	*image;
 
-	data = param;
+	main_struct = param;
+	data = &(main_struct->draw);
 	mlx = data->mlx;
 	image = data->image;
 	if (mlx_is_key_down(mlx, MLX_KEY_ESCAPE))
 		mlx_close_window(mlx);
-	draw(image, data);
+	draw(image, data, main_struct);
 
 	double angle = 0.02;
 	if (mlx_is_key_down(mlx, MLX_KEY_LEFT))
@@ -273,14 +275,13 @@ static void	game_hook(void *param)
 		data->player_pos.y = 1;
 	if (data->player_pos.y > 22)
 		data->player_pos.y = 22;
-	draw(image, data);
+	draw(image, data, main_struct);
 }
 
-void	start_graphics(int image_width, int image_heigth)
+void	start_graphics(int image_width, int image_heigth, t_cub3D *main_struct)
 {
 	mlx_t		*mlx;
 	mlx_image_t	*image;
-	t_draw		draw;
 
 	mlx = mlx_init(image_width, image_heigth, "cub3D", true);
 	// if (!mlx)
@@ -296,18 +297,13 @@ void	start_graphics(int image_width, int image_heigth)
 		mlx_close_window(mlx);
 		// fdf_cleanup_exit(map);
 	}
-	draw.mlx = mlx;
-	draw.image = image;
-	draw.image_width = image_width;
-	draw.image_heigth = image_heigth;
-	draw.player_pos.x = 5;
-	draw.player_pos.y = 12;
-	draw.player_dir.x = 1;
-	draw.player_dir.y = 0;
-	draw.camera_plane.x = 0;
-	draw.camera_plane.y = 0.66;
-
-	mlx_loop_hook(mlx, game_hook, &draw);
+	main_struct->draw.mlx = mlx;
+	main_struct->draw.image = image;
+	main_struct->draw.image_width = image_width;
+	main_struct->draw.image_heigth = image_heigth;
+	main_struct->draw.camera_plane.x = 0;
+	main_struct->draw.camera_plane.y = 0.66;
+	mlx_loop_hook(mlx, game_hook, main_struct);
 	mlx_loop(mlx);
 	mlx_terminate(mlx);
 }
