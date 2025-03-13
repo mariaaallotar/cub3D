@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:33:57 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/12 17:29:48 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/13 16:04:24 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,14 @@ int	testMap2[24][24] =
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 };
 
+int	testMap3[5][9] = 
+{
+	{1,1,1,1,1,1,1,1,1},
+	{1,0,0,0,0,0,0,0,1},
+	{1,0,0,0,1,0,0,0,1},
+	{1,0,0,0,0,0,0,0,1},
+	{1,1,1,1,1,1,1,1,1}
+};
 static t_point_double	calc_ray_direction(t_draw *data, int cur_screen_col)
 {
 	t_point_double	ray_dir;
@@ -184,7 +192,7 @@ static	int	cast_ray(t_point_double *ray_dist_to_side,
 			ray_pos.y += step_dir.y;
 			wall_side = 1;
 		}
-		if (testMap[ray_pos.y][ray_pos.x] > 0)
+		if (testMap3[ray_pos.y][ray_pos.x] > 0)
 		{
 			return (wall_side);
 		}
@@ -348,8 +356,8 @@ void	start_graphics(int image_width, int image_heigth)
 	data.image = image;
 	data.image_width = image_width;
 	data.image_heigth = image_heigth;
-	data.player_pos.x = 5;
-	data.player_pos.y = 12;
+	data.player_pos.x = 2;
+	data.player_pos.y = 2;
 	data.player_dir.x = 1;
 	data.player_dir.y = 0;
 
