@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:33:57 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/14 11:31:23 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/14 12:08:59 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,6 +171,31 @@ static double	calc_perp_wall_dist(int wall_side,
 	}
 }
 
+static void	draw_wall_column_tex(t_cub3D *main_struct, int cur_screen_col,
+								 int wall_side, double perpendicular_wall_dist)
+{
+	int	wall_heigth;
+	int	start_draw;
+	int	end_draw;
+	int	color;
+	t_draw	*data;
+
+	data = &main_struct->draw;
+	wall_heigth = data->image_heigth / perpendicular_wall_dist;
+	start_draw = -wall_heigth / 2 + data->image_heigth / 2;
+	if (start_draw < 0)
+		start_draw = 0;
+	end_draw = wall_heigth / 2 + data->image_heigth /2;
+	if (end_draw > data->image_heigth)
+		end_draw = data->image_heigth -1;
+
+	if (wall_side == 0)
+		color = 0xFF0000FF;
+	else
+		color = 0x990000FF;
+	draw_vert_line(main_struct->draw.image, cur_screen_col, start_draw, end_draw, color);
+}
+
 static void	draw_wall_column(mlx_image_t *image, int cur_screen_col, int wall_side,
 							 t_draw *data, double perpendicular_wall_dist)
 {
@@ -233,7 +258,9 @@ static void	draw(mlx_image_t *image, t_draw *data, t_cub3D *main_struct)
 		wall_side = cast_ray(&ray_dist_to_side, ray_step_dist, ray_pos, step_dir, main_struct->input.map);
 		perp_wall_dist = calc_perp_wall_dist(wall_side, ray_dist_to_side,
 												ray_step_dist);
-		draw_wall_column(image, cur_screen_col, wall_side, data, perp_wall_dist);
+		// draw_wall_column(image, cur_screen_col, wall_side, data, perp_wall_dist);
+		draw_wall_column_tex(main_struct, cur_screen_col, wall_side,
+					   perp_wall_dist);
 		cur_screen_col++;
 	}
 }
