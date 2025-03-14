@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:04:23 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/14 13:57:11 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/14 14:05:38 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,20 +125,20 @@ void	start_graphics(int image_width, int image_heigth, t_cub3D *main_struct);
 //draw_tools.c
 void	 draw_vert_line(mlx_image_t *image, int x, int start_y, int end_y, \
 	uint32_t color);
-	void	draw_floor_and_ceiling(mlx_image_t *image, t_draw *data);
+void	draw_floor_and_ceiling(t_cub3D *main_struct);
 	
-	//cam_move.c
-	void	cam_move_fwd(t_cub3D *main_struct);
-	void	cam_move_back(t_cub3D *main_struct);
-	void	cam_strafe_left(t_cub3D *main_struct);
-	void	cam_strafe_right(t_cub3D *main_struct);
-	//cam_turn.c
-	void	cam_turn_left(t_cub3D *main_struct);
-	void	cam_turn_right(t_cub3D *main_struct);
-	//memory.c
-	void	free_everything(t_cub3D	*main_struct, t_map_line **map);
-	void	free_map_list(t_map_line **map);
-	void	free_map_nodes(t_map_line **map);
+//cam_move.c
+void	cam_move_fwd(t_cub3D *main_struct);
+void	cam_move_back(t_cub3D *main_struct);
+void	cam_strafe_left(t_cub3D *main_struct);
+void	cam_strafe_right(t_cub3D *main_struct);
+//cam_turn.c
+void	cam_turn_left(t_cub3D *main_struct);
+void	cam_turn_right(t_cub3D *main_struct);
+//memory.c
+void	free_everything(t_cub3D	*main_struct, t_map_line **map);
+void	free_map_list(t_map_line **map);
+void	free_map_nodes(t_map_line **map);
 	
 //parse_file.c
 void    parse_input(int fd, t_cub3D *main_struct);
