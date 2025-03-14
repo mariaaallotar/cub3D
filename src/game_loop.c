@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:33:57 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/14 11:12:40 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/14 11:31:23 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,7 +218,7 @@ static void	draw(mlx_image_t *image, t_draw *data, t_cub3D *main_struct)
 	int				wall_side;
 	double			perp_wall_dist;
 
-	draw_floor_and_ceiling(image, data);
+	draw_floor_and_ceiling(main_struct);
 	cur_screen_col = 0;
 	while (cur_screen_col < data->image_width)
 	{
