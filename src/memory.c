@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 13:06:24 by maheleni          #+#    #+#             */
-/*   Updated: 2025/03/13 16:35:35 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/14 11:30:01 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ void	free_map_nodes(t_map_line **map)
 
 void	free_map_list(t_map_line **map)
 {
-	t_map_line *current;
-	t_map_line *next;
+	t_map_line	*current;
+	t_map_line	*next;
 
 	current = *map;
 	while (current != NULL)
