@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:04:23 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/13 17:45:39 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/14 11:27:19 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ void	start_graphics(int image_width, int image_heigth, t_cub3D *main_struct);
 //draw_tools.c
 void	 draw_vert_line(mlx_image_t *image, int x, int start_y, int end_y, \
 						uint32_t color);
-void	draw_floor_and_ceiling(mlx_image_t *image, t_draw *data);
+void	draw_floor_and_ceiling(t_cub3D *main_struct);
 
 //cam_move.c
 void	cam_move_fwd(t_cub3D *main_struct);
