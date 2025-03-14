@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:33:57 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/14 12:08:59 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/14 17:31:37 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,12 +172,13 @@ static double	calc_perp_wall_dist(int wall_side,
 }
 
 static void	draw_wall_column_tex(t_cub3D *main_struct, int cur_screen_col,
-								 int wall_side, double perpendicular_wall_dist)
+								 int wall_side, double perpendicular_wall_dist,
+								 t_point_double ray_dir)
 {
 	int	wall_heigth;
 	int	start_draw;
 	int	end_draw;
-	int	color;
+//	int	color;
 	t_draw	*data;
 
 	data = &main_struct->draw;
@@ -189,14 +190,74 @@ static void	draw_wall_column_tex(t_cub3D *main_struct, int cur_screen_col,
 	if (end_draw > data->image_heigth)
 		end_draw = data->image_heigth -1;
 
+	double	wall_x;
+	if (wall_side == 0)
+	{
+		wall_x = data->player_pos.y + perpendicular_wall_dist * ray_dir.y;
+	}
+	else
+	{
+		wall_x = data->player_pos.x + perpendicular_wall_dist * ray_dir.x;
+	}
+	wall_x -= floor(wall_x);
+
+	int	tex_x;
+	tex_x = (int) (wall_x * (double) main_struct->input.so_texture->width);
+//	printf("tex_x: %i\n", tex_x);
+	if (wall_side == 0 && ray_dir.x > 0)
+	{
+		tex_x = main_struct->input.so_texture->width - tex_x - 1;
+	}
+	else if (wall_side == 1 && ray_dir.y < 0)
+	{
+		tex_x = main_struct->input.so_texture->width - tex_x - 1;
+	}
+
+	double	tex_y_step = 1;
+	tex_y_step = 1.0 * main_struct->input.so_texture->height / wall_heigth;
+	double	tex_pos = (start_draw - data->image_heigth / 2.0 + wall_heigth / 2.0) * tex_y_step;
+	int	i;
+	i = start_draw;
+	while (i < end_draw)
+	{
+		unsigned int	tex_y;
+		// tex_y = (int) tex_pos & (main_struct->input.so_texture->height - 1);
+		tex_y = tex_pos;
+		if (tex_y >= main_struct->input.so_texture->height)
+			tex_y = main_struct->input.so_texture->height - 1;
+		tex_pos += tex_y_step;
+		int color;
+		// printf("y: %i, x: %i\n", tex_y, tex_x);
+		// tex_x = 0;
+	/* 	printf("%i, %i, %i, %i\n",
+			main_struct->input.ea_texture->pixels[((main_struct->input.so_texture->width * tex_y + tex_x) * 4) + 0],
+			main_struct->input.ea_texture->pixels[((main_struct->input.so_texture->width * tex_y + tex_x) * 4) + 1],
+			main_struct->input.ea_texture->pixels[((main_struct->input.so_texture->width * tex_y + tex_x) * 4) + 2],
+			main_struct->input.ea_texture->pixels[((main_struct->input.so_texture->width * tex_y + tex_x) * 4) + 3]
+		 ); */
+
+		color = convert_color(
+			main_struct->input.so_texture->pixels[(main_struct->input.so_texture->width * tex_y + tex_x) * 4],
+			main_struct->input.so_texture->pixels[((main_struct->input.so_texture->width * tex_y + tex_x) * 4) + 1],
+			main_struct->input.so_texture->pixels[((main_struct->input.so_texture->width * tex_y + tex_x) * 4) + 2],
+			main_struct->input.so_texture->pixels[((main_struct->input.so_texture->width * tex_y + tex_x) * 4) + 3]
+		);
+		mlx_put_pixel(main_struct->draw.image, cur_screen_col, i, color);
+		i++;
+	}
+
+
+
+
+/* 
 	if (wall_side == 0)
 		color = 0xFF0000FF;
 	else
 		color = 0x990000FF;
-	draw_vert_line(main_struct->draw.image, cur_screen_col, start_draw, end_draw, color);
+	draw_vert_line(main_struct->draw.image, cur_screen_col, start_draw, end_draw, color); */
 }
 
-static void	draw_wall_column(mlx_image_t *image, int cur_screen_col, int wall_side,
+/* static void	draw_wall_column(mlx_image_t *image, int cur_screen_col, int wall_side,
 							 t_draw *data, double perpendicular_wall_dist)
 {
 	int	wall_heigth;
@@ -217,7 +278,7 @@ static void	draw_wall_column(mlx_image_t *image, int cur_screen_col, int wall_si
 	else
 		color = 0x990000FF;
 	draw_vert_line(image, cur_screen_col, start_draw, end_draw, color);
-}
+} */
 
 // camera plane has to be perpendicular to player direction and have a magnitude
 // relative to the FOV
@@ -232,7 +293,7 @@ static t_point_double	calc_camera_plane(t_point_double player_dir)
 	return (camera_plane);
 }
 
-static void	draw(mlx_image_t *image, t_draw *data, t_cub3D *main_struct)
+static void	draw(t_draw *data, t_cub3D *main_struct)
 {
 	int				cur_screen_col;
 	t_point_double	ray_dir;
@@ -245,9 +306,9 @@ static void	draw(mlx_image_t *image, t_draw *data, t_cub3D *main_struct)
 
 	draw_floor_and_ceiling(main_struct);
 	cur_screen_col = 0;
+	data->camera_plane = calc_camera_plane(data->player_dir);
 	while (cur_screen_col < data->image_width)
 	{
-		data->camera_plane = calc_camera_plane(data->player_dir);
 		ray_pos.x = (int) data->player_pos.x;
 		ray_pos.y = (int) data->player_pos.y;
 		ray_dir = calc_ray_direction(data, cur_screen_col);
@@ -260,7 +321,7 @@ static void	draw(mlx_image_t *image, t_draw *data, t_cub3D *main_struct)
 												ray_step_dist);
 		// draw_wall_column(image, cur_screen_col, wall_side, data, perp_wall_dist);
 		draw_wall_column_tex(main_struct, cur_screen_col, wall_side,
-					   perp_wall_dist);
+					   perp_wall_dist, ray_dir);
 		cur_screen_col++;
 	}
 }
@@ -281,7 +342,7 @@ static void	game_hook(void *param)
 		mlx_close_window(mlx);
 		return ;
 	}
-	draw(image, data, main_struct);
+	draw(data, main_struct);
 	if (mlx_is_key_down(mlx, MLX_KEY_LEFT))
 	{
 		cam_turn_left(main_struct);
