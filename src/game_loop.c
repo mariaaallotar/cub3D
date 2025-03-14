@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:33:57 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/13 17:56:06 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/14 11:12:40 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ static t_point_double	calc_ray_step_distance(t_point_double ray_dir)
 	}
 	else
 	{
-		// ray_step_dist.x = sqrt(1 + (ray_dir.y * ray_dir.y) / (ray_dir.x * ray_dir.x));
+		// ray_step_dist.x = 
+		// sqrt(1 + (ray_dir.y * ray_dir.y) / (ray_dir.x * ray_dir.x));
 		ray_step_dist.x = fabs(1/ray_dir.x);
 	}
 	if (ray_dir.y == 0)
@@ -44,7 +45,8 @@ static t_point_double	calc_ray_step_distance(t_point_double ray_dir)
 	}
 	else
 	{
-		// ray_step_dist.y = sqrt(1 + (ray_dir.x * ray_dir.x) / (ray_dir.y * ray_dir.y));
+		// ray_step_dist.y = 
+		// sqrt(1 + (ray_dir.x * ray_dir.x) / (ray_dir.y * ray_dir.y));
 		ray_step_dist.y = fabs(1/ray_dir.y);
 	}
 	return (ray_step_dist);
@@ -103,10 +105,23 @@ static t_point_double	calc_ray_dist_to_side(t_draw *data,
 	return (ray_dist_to_side);
 }
 
+static bool	out_of_bounds(t_point_int ray_pos, char **map)
+{
+	if (ray_pos.y < 0 || ray_pos.x < 0)
+		return (true);
+	if (map[ray_pos.y][ray_pos.x] == ' ')
+		return (true);
+	if (map[ray_pos.y][ray_pos.x] == '\0')
+		return (true);
+	if (map[ray_pos.y] == NULL)
+		return (true);
+	return (false);
+}
+
 // This is the core of the DDA algo
 // returns the side of the wall that has been hit
 // also increments ray_dist_to_side for later
-// TODO: proofing against infinite loop here?
+// Cannot enter infinite loop because ray_pos is incremented on every loop
 static	int	cast_ray(t_point_double *ray_dist_to_side,
 					t_point_double ray_step_dist, t_point_int ray_pos,
 					t_point_int step_dir, char **map)
@@ -127,6 +142,11 @@ static	int	cast_ray(t_point_double *ray_dist_to_side,
 			ray_dist_to_side->y += ray_step_dist.y;
 			ray_pos.y += step_dir.y;
 			wall_side = 1;
+		}
+		if (out_of_bounds(ray_pos, map))
+		{
+			// dont fail, just keep chugging (is this a good idea?)
+			return (wall_side);
 		}
 		if (map[ray_pos.y][ray_pos.x] == '1')
 		{
@@ -284,8 +304,6 @@ void	start_graphics(int image_width, int image_heigth, t_cub3D *main_struct)
 	main_struct->draw.image = image;
 	main_struct->draw.image_width = image_width;
 	main_struct->draw.image_heigth = image_heigth;
-	main_struct->draw.camera_plane.x = 0;
-	main_struct->draw.camera_plane.y = 0.66;
 	mlx_loop_hook(mlx, game_hook, main_struct);
 	mlx_loop(mlx);
 	mlx_terminate(mlx);
