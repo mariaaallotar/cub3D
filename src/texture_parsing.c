@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 12:18:38 by maheleni          #+#    #+#             */
-/*   Updated: 2025/03/13 19:40:37 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/14 11:29:12 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,19 @@ int	set_texture(char *texture, mlx_texture_t **texture_location_pointer)
 }
 
 int	set_texture_location_pointer(char *type_identifier,
-	mlx_texture_t ***texture_location_pointer,t_cub3D *main_struct)
+	mlx_texture_t ***texture_location_pointer, t_cub3D *main_struct)
 {
-	if (ft_strncmp("NO\0", type_identifier, 3) == 0 ||
-		ft_strncmp("NO\n", type_identifier, 3) == 0)
+	if (ft_strncmp("NO\0", type_identifier, 3) == 0
+		|| ft_strncmp("NO\n", type_identifier, 3) == 0)
 		*texture_location_pointer = &(main_struct->input.no_texture);
-	else if (ft_strncmp("EA\0", type_identifier, 3) == 0 ||
-		ft_strncmp("EA\n", type_identifier, 3) == 0)
+	else if (ft_strncmp("EA\0", type_identifier, 3) == 0
+		|| ft_strncmp("EA\n", type_identifier, 3) == 0)
 		*texture_location_pointer = &(main_struct->input.ea_texture);
-	else if (ft_strncmp("SO\0", type_identifier, 3) == 0 ||
-		ft_strncmp("SO\n", type_identifier, 3) == 0)
+	else if (ft_strncmp("SO\0", type_identifier, 3) == 0
+		|| ft_strncmp("SO\n", type_identifier, 3) == 0)
 		*texture_location_pointer = &(main_struct->input.so_texture);
-	else if (ft_strncmp("WE\0", type_identifier, 3) == 0 ||
-		ft_strncmp("WE\n", type_identifier, 3) == 0)
+	else if (ft_strncmp("WE\0", type_identifier, 3) == 0
+		|| ft_strncmp("WE\n", type_identifier, 3) == 0)
 		*texture_location_pointer = &(main_struct->input.we_texture);
 	else
 		return (print_error_message(NOT_IDENTIFIER));
@@ -52,12 +52,12 @@ int	set_wall_texture(char *type_identifier, char *texture,
 
 	texture_location_pointer = NULL;
 	if (set_texture_location_pointer(type_identifier,
-		&texture_location_pointer, main_struct) < 0)
+			&texture_location_pointer, main_struct) < 0)
 		return (-1);
 	if (*texture_location_pointer != NULL)
 		return (print_error_message(DOUBLE_WALL_ID));
 	if (texture == NULL || *texture == '\n')
-		return(print_error_message(IDENTIFIER_WITHOUT_VALUE));
+		return (print_error_message(IDENTIFIER_WITHOUT_VALUE));
 	trimmed_texture = ft_strtrim(texture, "\n");
 	if (trimmed_texture == NULL)
 		return (-1);

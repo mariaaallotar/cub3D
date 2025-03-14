@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:04:23 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/13 18:58:05 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/14 13:57:11 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,6 @@ typedef struct s_cub3D
 //validate_args.c
 void	validate_arguments(int argc, char **argv);
 
-//parse_file.c
-void    parse_file(int fd, t_cub3D *main_struct);
 
 //colors.c
 int32_t convert_color(int32_t r, int32_t g, int32_t b, int32_t a);
@@ -126,21 +124,31 @@ void	start_graphics(int image_width, int image_heigth, t_cub3D *main_struct);
 
 //draw_tools.c
 void	 draw_vert_line(mlx_image_t *image, int x, int start_y, int end_y, \
-						uint32_t color);
-void	draw_floor_and_ceiling(mlx_image_t *image, t_draw *data);
+	uint32_t color);
+	void	draw_floor_and_ceiling(mlx_image_t *image, t_draw *data);
+	
+	//cam_move.c
+	void	cam_move_fwd(t_cub3D *main_struct);
+	void	cam_move_back(t_cub3D *main_struct);
+	void	cam_strafe_left(t_cub3D *main_struct);
+	void	cam_strafe_right(t_cub3D *main_struct);
+	//cam_turn.c
+	void	cam_turn_left(t_cub3D *main_struct);
+	void	cam_turn_right(t_cub3D *main_struct);
+	//memory.c
+	void	free_everything(t_cub3D	*main_struct, t_map_line **map);
+	void	free_map_list(t_map_line **map);
+	void	free_map_nodes(t_map_line **map);
+	
+//parse_file.c
+void    parse_input(int fd, t_cub3D *main_struct);
 
-//cam_move.c
-void	cam_move_fwd(t_cub3D *main_struct);
-void	cam_move_back(t_cub3D *main_struct);
-void	cam_strafe_left(t_cub3D *main_struct);
-void	cam_strafe_right(t_cub3D *main_struct);
-//cam_turn.c
-void	cam_turn_left(t_cub3D *main_struct);
-void	cam_turn_right(t_cub3D *main_struct);
-//memory.c
-void	free_everything(t_cub3D	*main_struct, t_map_line **map);
-void	free_map_list(t_map_line **map);
-void	free_map_nodes(t_map_line **map);
+//parse_line.c
+void	parse_line(char **line, int fd, t_map_line **map, t_cub3D *main_struct);
+
+//set_player.c
+void	set_player(t_map_line *current, t_cub3D *main_struct, int i,
+	char direction);
 
 //error.c
 int	print_error_message(int return_value);
@@ -154,12 +162,16 @@ int	set_wall_texture(char *type_identifier, char *texture,
 	t_cub3D *main_struct);
 
 //map_parsing.c
-int	start_of_map(char **line, t_cub3D *main_struct);
-int	set_map(char *line, int fd, t_map_line **map, t_cub3D *main_struct);
+int	start_of_map(char **line, int fd, t_cub3D *main_struct);
+int	parse_map(char **line, int fd, t_map_line **map, t_cub3D *main_struct);
 
 //map_validation.c
 int	validate_map(t_map_line **map);
 int	check_forbidden_chars(t_map_line *current, t_cub3D *main_struct);
 
+//map_validation_utils.c
+int	check_zero(t_map_line *current, int i);
+int	check_player(t_map_line *current, int i);
+int	rest_is_whitespace(int fd);
 
 #endif

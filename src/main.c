@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 13:41:08 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/13 19:00:30 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/14 11:09:25 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	main(int argc, char **argv)
 	validate_arguments(argc, argv);
 	fd = open_file(argv[1]);
 	init_main_struct(&main_struct);
-	parse_file(fd, &main_struct);
+	parse_input(fd, &main_struct);
 	init_game(&main_struct);
 	free_everything(&main_struct, NULL);
 	return (0);

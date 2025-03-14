@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 13:07:50 by maheleni          #+#    #+#             */
-/*   Updated: 2025/03/13 19:41:27 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/14 12:27:53 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ void	identifier_errors(int return_value)
 	else if (return_value == NOT_IDENTIFIER)
 		ft_putstr_fd("Error: identifier not supported\n", 2);
 	else if (return_value == DOUBLE_COLOR_ID)
-		ft_putstr_fd("Error: several floor and/or ceiling color identifiers found\n", 2);
+		ft_putstr_fd("Error: several floor and/or ceiling color identifiers "
+			"found\n", 2);
 	else if (return_value == DOUBLE_WALL_ID)
 		ft_putstr_fd("Error: several of one wall texture identifier found\n", 2);
 	else if (return_value == MAP_NOT_LAST)
