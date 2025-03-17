@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:33:57 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/14 17:31:37 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/17 12:12:18 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,6 +180,9 @@ static void	draw_wall_column_tex(t_cub3D *main_struct, int cur_screen_col,
 	int	end_draw;
 //	int	color;
 	t_draw	*data;
+	mlx_texture_t	*texture;
+
+	texture = main_struct->input.no_texture;
 
 	data = &main_struct->draw;
 	wall_heigth = data->image_heigth / perpendicular_wall_dist;
@@ -202,45 +205,45 @@ static void	draw_wall_column_tex(t_cub3D *main_struct, int cur_screen_col,
 	wall_x -= floor(wall_x);
 
 	int	tex_x;
-	tex_x = (int) (wall_x * (double) main_struct->input.so_texture->width);
+	tex_x = (int) (wall_x * (double) texture->width);
 //	printf("tex_x: %i\n", tex_x);
 	if (wall_side == 0 && ray_dir.x > 0)
 	{
-		tex_x = main_struct->input.so_texture->width - tex_x - 1;
+		tex_x = texture->width - tex_x - 1;
 	}
 	else if (wall_side == 1 && ray_dir.y < 0)
 	{
-		tex_x = main_struct->input.so_texture->width - tex_x - 1;
+		tex_x = texture->width - tex_x - 1;
 	}
 
 	double	tex_y_step = 1;
-	tex_y_step = 1.0 * main_struct->input.so_texture->height / wall_heigth;
+	tex_y_step = 1.0 * texture->height / wall_heigth;
 	double	tex_pos = (start_draw - data->image_heigth / 2.0 + wall_heigth / 2.0) * tex_y_step;
 	int	i;
 	i = start_draw;
 	while (i < end_draw)
 	{
 		unsigned int	tex_y;
-		// tex_y = (int) tex_pos & (main_struct->input.so_texture->height - 1);
+		// tex_y = (int) tex_pos & (texture->height - 1);
 		tex_y = tex_pos;
-		if (tex_y >= main_struct->input.so_texture->height)
-			tex_y = main_struct->input.so_texture->height - 1;
+		if (tex_y >= texture->height)
+			tex_y = texture->height - 1;
 		tex_pos += tex_y_step;
 		int color;
 		// printf("y: %i, x: %i\n", tex_y, tex_x);
 		// tex_x = 0;
 	/* 	printf("%i, %i, %i, %i\n",
-			main_struct->input.ea_texture->pixels[((main_struct->input.so_texture->width * tex_y + tex_x) * 4) + 0],
-			main_struct->input.ea_texture->pixels[((main_struct->input.so_texture->width * tex_y + tex_x) * 4) + 1],
-			main_struct->input.ea_texture->pixels[((main_struct->input.so_texture->width * tex_y + tex_x) * 4) + 2],
-			main_struct->input.ea_texture->pixels[((main_struct->input.so_texture->width * tex_y + tex_x) * 4) + 3]
+			main_struct->input.ea_texture->pixels[((texture->width * tex_y + tex_x) * 4) + 0],
+			main_struct->input.ea_texture->pixels[((texture->width * tex_y + tex_x) * 4) + 1],
+			main_struct->input.ea_texture->pixels[((texture->width * tex_y + tex_x) * 4) + 2],
+			main_struct->input.ea_texture->pixels[((texture->width * tex_y + tex_x) * 4) + 3]
 		 ); */
 
 		color = convert_color(
-			main_struct->input.so_texture->pixels[(main_struct->input.so_texture->width * tex_y + tex_x) * 4],
-			main_struct->input.so_texture->pixels[((main_struct->input.so_texture->width * tex_y + tex_x) * 4) + 1],
-			main_struct->input.so_texture->pixels[((main_struct->input.so_texture->width * tex_y + tex_x) * 4) + 2],
-			main_struct->input.so_texture->pixels[((main_struct->input.so_texture->width * tex_y + tex_x) * 4) + 3]
+			texture->pixels[(texture->width * tex_y + tex_x) * 4],
+			texture->pixels[((texture->width * tex_y + tex_x) * 4) + 1],
+			texture->pixels[((texture->width * tex_y + tex_x) * 4) + 2],
+			texture->pixels[((texture->width * tex_y + tex_x) * 4) + 3]
 		);
 		mlx_put_pixel(main_struct->draw.image, cur_screen_col, i, color);
 		i++;
