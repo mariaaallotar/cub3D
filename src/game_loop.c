@@ -6,11 +6,24 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:33:57 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/18 11:26:06 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/18 12:26:53 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
+
+typedef struct s_cast
+{
+	int				cur_screen_col;
+	t_point_double	ray_dir;
+	t_point_double	ray_step_dist;
+	t_point_int		ray_pos;
+	t_point_double	ray_dist_to_side;
+	t_point_int		step_dir;
+	int				wall_side;
+	double			perp_wall_dist;
+
+} t_cast;
 
 static t_point_double	calc_ray_direction(t_draw *data, int cur_screen_col)
 {
@@ -77,30 +90,29 @@ static t_point_int	calc_ray_step_direction(t_point_double ray_dir)
 }
 
 // distance to first tile side we encounter
-static t_point_double	calc_ray_dist_to_side(t_draw *data,
-										   t_point_double ray_dir,
-										   t_point_int ray_pos,
-										   t_point_double ray_step_dist)
+static t_point_double	calc_ray_dist_to_side(t_draw *data, t_cast *cast)
 {
 	t_point_double	ray_dist_to_side;
 
-	if (ray_dir.x < 0)
+	if (cast->ray_dir.x < 0)
 	{
-		ray_dist_to_side.x = (data->player_pos.x - ray_pos.x) * ray_step_dist.x;
+		ray_dist_to_side.x = (data->player_pos.x - cast->ray_pos.x)
+			* cast->ray_step_dist.x;
 	}
 	else
 	{
-		ray_dist_to_side.x = (ray_pos.x + 1.0 - data->player_pos.x)
-			* ray_step_dist.x;
+		ray_dist_to_side.x = (cast->ray_pos.x + 1.0 - data->player_pos.x)
+			* cast->ray_step_dist.x;
 	}
-	if (ray_dir.y < 0)
+	if (cast->ray_dir.y < 0)
 	{
-		ray_dist_to_side.y = (data->player_pos.y - ray_pos.y) * ray_step_dist.y;
+		ray_dist_to_side.y = (data->player_pos.y - cast->ray_pos.y)
+			* cast->ray_step_dist.y;
 	}
 	else
 	{
-		ray_dist_to_side.y = (ray_pos.y + 1.0 - data->player_pos.y)
-			* ray_step_dist.y;
+		ray_dist_to_side.y = (cast->ray_pos.y + 1.0 - data->player_pos.y)
+			* cast->ray_step_dist.y;
 	}
 	return (ray_dist_to_side);
 }
@@ -122,33 +134,31 @@ static bool	out_of_bounds(t_point_int ray_pos, char **map)
 // returns the side of the wall that has been hit
 // also increments ray_dist_to_side for later
 // Cannot enter infinite loop because ray_pos is incremented on every loop
-static	int	cast_ray(t_point_double *ray_dist_to_side,
-					t_point_double ray_step_dist, t_point_int ray_pos,
-					t_point_int step_dir, char **map)
+static	int	cast_ray(t_cast *cast, char **map)
 {
 	int	wall_side;
 
 	wall_side = 0;
 	while (true)
 	{
-		if (ray_dist_to_side->x < ray_dist_to_side->y)
+		if (cast->ray_dist_to_side.x < cast->ray_dist_to_side.y)
 		{
-			ray_dist_to_side->x += ray_step_dist.x;
-			ray_pos.x += step_dir.x;
+			cast->ray_dist_to_side.x += cast->ray_step_dist.x;
+			cast->ray_pos.x += cast->step_dir.x;
 			wall_side = 0;
 		}
 		else
 		{
-			ray_dist_to_side->y += ray_step_dist.y;
-			ray_pos.y += step_dir.y;
+			cast->ray_dist_to_side.y += cast->ray_step_dist.y;
+			cast->ray_pos.y += cast->step_dir.y;
 			wall_side = 1;
 		}
-		if (out_of_bounds(ray_pos, map))
+		if (out_of_bounds(cast->ray_pos, map))
 		{
 			// dont fail, just keep chugging (is this a good idea?)
 			return (wall_side);
 		}
-		if (map[ray_pos.y][ray_pos.x] == '1')
+		if (map[cast->ray_pos.y][cast->ray_pos.x] == '1')
 		{
 			return (wall_side);
 		}
@@ -157,88 +167,87 @@ static	int	cast_ray(t_point_double *ray_dist_to_side,
 
 // calculate distance of wall to camera plane, not to player. This
 // avoids fish-eye effect
-static double	calc_perp_wall_dist(int wall_side,
-								 t_point_double ray_dist_to_side,
-								 t_point_double ray_step_dist)
+static double	calc_perp_wall_dist(t_cast *cast)
 {
-	if (wall_side == 0)
+	if (cast->wall_side == 0)
 	{
-		return (ray_dist_to_side.x - ray_step_dist.x);
+		return (cast->ray_dist_to_side.x - cast->ray_step_dist.x);
 	}
 	else
 	{
-		return (ray_dist_to_side.y - ray_step_dist.y);
+		return (cast->ray_dist_to_side.y - cast->ray_step_dist.y);
 	}
 }
 
+// should never go to the last return
 static	mlx_texture_t	*pick_texture(t_cub3D *main_struct, int wall_side, 
 								   t_point_int step_dir)
 {
 	if (wall_side == 0)
 	{
 		if (step_dir.x < 0)
-			return (main_struct->input.no_texture);
+			return (main_struct->input.ea_texture);
 		if (step_dir.x > 0)
-			return (main_struct->input.so_texture);
+			return (main_struct->input.we_texture);
 	}
 	if (wall_side == 1)
 	{
 		if (step_dir.y < 0)
-			return (main_struct->input.ea_texture);
+			return (main_struct->input.so_texture);
 		if (step_dir.y > 0)
-			return (main_struct->input.we_texture);
+			return (main_struct->input.no_texture);
 	}
 	return (main_struct->input.ea_texture);
 }
 
-static void	draw_wall_column_tex(t_cub3D *main_struct, int cur_screen_col,
-								 int wall_side, double perpendicular_wall_dist,
-								 t_point_double ray_dir, t_point_int step_dir)
+static void	draw_wall_column_tex(t_cub3D *main_struct, t_cast *cast)
 {
 	int	wall_heigth;
 	int	start_draw;
 	int	end_draw;
-//	int	color;
-	t_draw	*data;
+	int	color;
+	t_draw	*draw;
 	mlx_texture_t	*texture;
 
-	texture = main_struct->input.no_texture;
-
-	data = &main_struct->draw;
-	wall_heigth = data->image_heigth / perpendicular_wall_dist;
-	start_draw = -wall_heigth / 2 + data->image_heigth / 2;
+	draw = &main_struct->draw;
+	wall_heigth = draw->image_heigth / cast->perp_wall_dist;
+	start_draw = -wall_heigth / 2 + draw->image_heigth / 2;
 	if (start_draw < 0)
 		start_draw = 0;
-	end_draw = wall_heigth / 2 + data->image_heigth /2;
-	if (end_draw > data->image_heigth)
-		end_draw = data->image_heigth -1;
+	end_draw = wall_heigth / 2 + draw->image_heigth /2;
+	if (end_draw > draw->image_heigth)
+		end_draw = draw->image_heigth -1;
 
 	double	wall_x;
-	if (wall_side == 0)
+	if (cast->wall_side == 0)
 	{
-		wall_x = data->player_pos.y + perpendicular_wall_dist * ray_dir.y;
+		wall_x = draw->player_pos.y + cast->perp_wall_dist * cast->ray_dir.y;
 	}
 	else
 	{
-		wall_x = data->player_pos.x + perpendicular_wall_dist * ray_dir.x;
+		wall_x = draw->player_pos.x + cast->perp_wall_dist * cast->ray_dir.x;
 	}
 	wall_x -= floor(wall_x);
 
+	texture = pick_texture(main_struct, cast->wall_side, cast->step_dir);
 	int	tex_x;
 	tex_x = (int) (wall_x * (double) texture->width);
 //	printf("tex_x: %i\n", tex_x);
-	if (wall_side == 0 && ray_dir.x > 0)
+	
+	//tex_x = texture->width - tex_x - 1;
+	//	this block affect mirrored textures
+	/* if (wall_side == 0 && ray_dir.x > 0)
 	{
 		tex_x = texture->width - tex_x - 1;
 	}
 	else if (wall_side == 1 && ray_dir.y < 0)
 	{
 		tex_x = texture->width - tex_x - 1;
-	}
+	} */
 
 	double	tex_y_step = 1;
 	tex_y_step = 1.0 * texture->height / wall_heigth;
-	double	tex_pos = (start_draw - data->image_heigth / 2.0 + wall_heigth / 2.0) * tex_y_step;
+	double	tex_pos = (start_draw - draw->image_heigth / 2.0 + wall_heigth / 2.0) * tex_y_step;
 	int	i;
 	i = start_draw;
 	while (i < end_draw)
@@ -249,7 +258,6 @@ static void	draw_wall_column_tex(t_cub3D *main_struct, int cur_screen_col,
 		if (tex_y >= texture->height)
 			tex_y = texture->height - 1;
 		tex_pos += tex_y_step;
-		int color;
 		// printf("y: %i, x: %i\n", tex_y, tex_x);
 		// tex_x = 0;
 	/* 	printf("%i, %i, %i, %i\n",
@@ -258,40 +266,16 @@ static void	draw_wall_column_tex(t_cub3D *main_struct, int cur_screen_col,
 			main_struct->input.ea_texture->pixels[((texture->width * tex_y + tex_x) * 4) + 2],
 			main_struct->input.ea_texture->pixels[((texture->width * tex_y + tex_x) * 4) + 3]
 		 ); */
-		texture = pick_texture(main_struct, wall_side, step_dir);
 		color = convert_color(
 			texture->pixels[(texture->width * tex_y + tex_x) * 4],
 			texture->pixels[((texture->width * tex_y + tex_x) * 4) + 1],
 			texture->pixels[((texture->width * tex_y + tex_x) * 4) + 2],
 			texture->pixels[((texture->width * tex_y + tex_x) * 4) + 3]
 		);
-		mlx_put_pixel(main_struct->draw.image, cur_screen_col, i, color);
+		mlx_put_pixel(draw->image, cast->cur_screen_col, i, color);
 		i++;
 	}
 }
-
-/* static void	draw_wall_column(mlx_image_t *image, int cur_screen_col, int wall_side,
-							 t_draw *data, double perpendicular_wall_dist)
-{
-	int	wall_heigth;
-	int	start_draw;
-	int	end_draw;
-	int	color;
-
-	wall_heigth = data->image_heigth / perpendicular_wall_dist;
-	start_draw = -wall_heigth / 2 + data->image_heigth / 2;
-	if (start_draw < 0)
-		start_draw = 0;
-	end_draw = wall_heigth / 2 + data->image_heigth /2;
-	if (end_draw > data->image_heigth)
-		end_draw = data->image_heigth -1;
-
-	if (wall_side == 0)
-		color = 0xFF0000FF;
-	else
-		color = 0x990000FF;
-	draw_vert_line(image, cur_screen_col, start_draw, end_draw, color);
-} */
 
 // camera plane has to be perpendicular to player direction and have a magnitude
 // relative to the FOV
@@ -308,34 +292,23 @@ static t_point_double	calc_camera_plane(t_point_double player_dir)
 
 static void	draw(t_draw *data, t_cub3D *main_struct)
 {
-	int				cur_screen_col;
-	t_point_double	ray_dir;
-	t_point_double	ray_step_dist;
-	t_point_int		ray_pos;
-	t_point_double	ray_dist_to_side;
-	t_point_int		step_dir;
-	int				wall_side;
-	double			perp_wall_dist;
+	t_cast	cast;
 
 	draw_floor_and_ceiling(main_struct);
-	cur_screen_col = 0;
+	cast.cur_screen_col = 0;
 	data->camera_plane = calc_camera_plane(data->player_dir);
-	while (cur_screen_col < data->image_width)
+	while (cast.cur_screen_col < data->image_width)
 	{
-		ray_pos.x = (int) data->player_pos.x;
-		ray_pos.y = (int) data->player_pos.y;
-		ray_dir = calc_ray_direction(data, cur_screen_col);
-		ray_step_dist = calc_ray_step_distance(ray_dir);
-		step_dir = calc_ray_step_direction(ray_dir);
-		ray_dist_to_side = calc_ray_dist_to_side(data, ray_dir, ray_pos,
-										   ray_step_dist);
-		wall_side = cast_ray(&ray_dist_to_side, ray_step_dist, ray_pos, step_dir, main_struct->input.map);
-		perp_wall_dist = calc_perp_wall_dist(wall_side, ray_dist_to_side,
-												ray_step_dist);
-		// draw_wall_column(image, cur_screen_col, wall_side, data, perp_wall_dist);
-		draw_wall_column_tex(main_struct, cur_screen_col, wall_side,
-					   perp_wall_dist, ray_dir, step_dir);
-		cur_screen_col++;
+		cast.ray_pos.x = (int) data->player_pos.x;
+		cast.ray_pos.y = (int) data->player_pos.y;
+		cast.ray_dir = calc_ray_direction(data, cast.cur_screen_col);
+		cast.ray_step_dist = calc_ray_step_distance(cast.ray_dir);
+		cast.step_dir = calc_ray_step_direction(cast.ray_dir);
+		cast.ray_dist_to_side = calc_ray_dist_to_side(data, &cast);
+		cast.wall_side = cast_ray(&cast, main_struct->input.map);
+		cast.perp_wall_dist = calc_perp_wall_dist(&cast);
+		draw_wall_column_tex(main_struct, &cast);
+		cast.cur_screen_col++;
 	}
 }
 
