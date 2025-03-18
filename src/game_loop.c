@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:33:57 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/17 12:12:18 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/18 11:26:06 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,9 +171,29 @@ static double	calc_perp_wall_dist(int wall_side,
 	}
 }
 
+static	mlx_texture_t	*pick_texture(t_cub3D *main_struct, int wall_side, 
+								   t_point_int step_dir)
+{
+	if (wall_side == 0)
+	{
+		if (step_dir.x < 0)
+			return (main_struct->input.no_texture);
+		if (step_dir.x > 0)
+			return (main_struct->input.so_texture);
+	}
+	if (wall_side == 1)
+	{
+		if (step_dir.y < 0)
+			return (main_struct->input.ea_texture);
+		if (step_dir.y > 0)
+			return (main_struct->input.we_texture);
+	}
+	return (main_struct->input.ea_texture);
+}
+
 static void	draw_wall_column_tex(t_cub3D *main_struct, int cur_screen_col,
 								 int wall_side, double perpendicular_wall_dist,
-								 t_point_double ray_dir)
+								 t_point_double ray_dir, t_point_int step_dir)
 {
 	int	wall_heigth;
 	int	start_draw;
@@ -238,7 +258,7 @@ static void	draw_wall_column_tex(t_cub3D *main_struct, int cur_screen_col,
 			main_struct->input.ea_texture->pixels[((texture->width * tex_y + tex_x) * 4) + 2],
 			main_struct->input.ea_texture->pixels[((texture->width * tex_y + tex_x) * 4) + 3]
 		 ); */
-
+		texture = pick_texture(main_struct, wall_side, step_dir);
 		color = convert_color(
 			texture->pixels[(texture->width * tex_y + tex_x) * 4],
 			texture->pixels[((texture->width * tex_y + tex_x) * 4) + 1],
@@ -248,16 +268,6 @@ static void	draw_wall_column_tex(t_cub3D *main_struct, int cur_screen_col,
 		mlx_put_pixel(main_struct->draw.image, cur_screen_col, i, color);
 		i++;
 	}
-
-
-
-
-/* 
-	if (wall_side == 0)
-		color = 0xFF0000FF;
-	else
-		color = 0x990000FF;
-	draw_vert_line(main_struct->draw.image, cur_screen_col, start_draw, end_draw, color); */
 }
 
 /* static void	draw_wall_column(mlx_image_t *image, int cur_screen_col, int wall_side,
@@ -324,7 +334,7 @@ static void	draw(t_draw *data, t_cub3D *main_struct)
 												ray_step_dist);
 		// draw_wall_column(image, cur_screen_col, wall_side, data, perp_wall_dist);
 		draw_wall_column_tex(main_struct, cur_screen_col, wall_side,
-					   perp_wall_dist, ray_dir);
+					   perp_wall_dist, ray_dir, step_dir);
 		cur_screen_col++;
 	}
 }
