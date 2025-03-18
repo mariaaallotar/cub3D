@@ -6,7 +6,7 @@
 #    By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2025/03/14 11:41:04 by maheleni         ###   ########.fr        #
+#    Updated: 2025/03/18 15:22:54 by lemercie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ OBJDIR	:= ./obj/
 SRCS	:= $(addprefix $(SRCDIR), main.c validate_args.c parse_file.c error.c \
 		   memory.c colors.c color_parsing.c texture_parsing.c map_parsing.c \
 		   map_validation.c game_loop.c draw_tools.c cam_move.c cam_turn.c \
-		   parse_line.c set_player.c map_validation_utils.c)
+		   raycaster.c parse_line.c set_player.c map_validation_utils.c)
 OBJS	:= ${SRCS:$(SRCDIR)%.c=$(OBJDIR)%.o}
 
 all: libft libmlx $(NAME)

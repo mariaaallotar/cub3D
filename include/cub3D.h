@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:04:23 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/14 14:05:38 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/18 15:22:27 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,6 +168,9 @@ int	parse_map(char **line, int fd, t_map_line **map, t_cub3D *main_struct);
 //map_validation.c
 int	validate_map(t_map_line **map);
 int	check_forbidden_chars(t_map_line *current, t_cub3D *main_struct);
+
+//raycaster.c
+void	draw(t_draw *data, t_cub3D *main_struct);
 
 //map_validation_utils.c
 int	check_zero(t_map_line *current, int i);
