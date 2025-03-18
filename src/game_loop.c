@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:33:57 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/18 12:26:53 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/18 14:12:50 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,13 @@ typedef struct s_cast
 	t_point_int		step_dir;
 	int				wall_side;
 	double			perp_wall_dist;
+	int				wall_heigth;
+	int				start_draw;
+	int				end_draw;
+	double			wall_x;
+	int				tex_x;
+	double			tex_y_step;
+	double 			tex_pos;
 
 } t_cast;
 
@@ -200,81 +207,84 @@ static	mlx_texture_t	*pick_texture(t_cub3D *main_struct, int wall_side,
 	return (main_struct->input.ea_texture);
 }
 
-static void	draw_wall_column_tex(t_cub3D *main_struct, t_cast *cast)
+static void	calc_wall_heigth(t_draw *draw, t_cast *cast)
 {
-	int	wall_heigth;
-	int	start_draw;
-	int	end_draw;
-	int	color;
-	t_draw	*draw;
-	mlx_texture_t	*texture;
+	cast->wall_heigth = draw->image_heigth / cast->perp_wall_dist;
+	cast->start_draw = -cast->wall_heigth / 2 + draw->image_heigth / 2;
+	if (cast->start_draw < 0)
+		cast->start_draw = 0;
+	cast->end_draw = cast->wall_heigth / 2 + draw->image_heigth /2;
+	if (cast->end_draw > draw->image_heigth)
+		cast->end_draw = draw->image_heigth -1;
+}
 
-	draw = &main_struct->draw;
-	wall_heigth = draw->image_heigth / cast->perp_wall_dist;
-	start_draw = -wall_heigth / 2 + draw->image_heigth / 2;
-	if (start_draw < 0)
-		start_draw = 0;
-	end_draw = wall_heigth / 2 + draw->image_heigth /2;
-	if (end_draw > draw->image_heigth)
-		end_draw = draw->image_heigth -1;
-
-	double	wall_x;
+static void	calc_wall_x(t_cast *cast, t_draw *draw)
+{
 	if (cast->wall_side == 0)
 	{
-		wall_x = draw->player_pos.y + cast->perp_wall_dist * cast->ray_dir.y;
+		cast->wall_x = draw->player_pos.y + cast->perp_wall_dist * cast->ray_dir.y;
 	}
 	else
 	{
-		wall_x = draw->player_pos.x + cast->perp_wall_dist * cast->ray_dir.x;
+		cast->wall_x = draw->player_pos.x + cast->perp_wall_dist * cast->ray_dir.x;
 	}
-	wall_x -= floor(wall_x);
+	cast->wall_x -= floor(cast->wall_x);
+}
 
-	texture = pick_texture(main_struct, cast->wall_side, cast->step_dir);
-	int	tex_x;
-	tex_x = (int) (wall_x * (double) texture->width);
-//	printf("tex_x: %i\n", tex_x);
-	
-	//tex_x = texture->width - tex_x - 1;
-	//	this block affect mirrored textures
-	/* if (wall_side == 0 && ray_dir.x > 0)
-	{
-		tex_x = texture->width - tex_x - 1;
-	}
-	else if (wall_side == 1 && ray_dir.y < 0)
-	{
-		tex_x = texture->width - tex_x - 1;
-	} */
+// the if-else here mirrors some of the textures in some situations
+static void	find_pos_in_texture(mlx_texture_t *texture,
+								t_cast *cast, t_draw *draw)
+{
+	cast->tex_x = cast->wall_x * (double) texture->width;
+	if (cast->wall_side == 0 && cast->ray_dir.x < 0)
+		cast->tex_x = texture->width - cast->tex_x - 1;
+	else if (cast->wall_side == 1 && cast->ray_dir.y > 0)
+		cast->tex_x = texture->width - cast->tex_x - 1;
+	cast->tex_y_step = (double) texture->height / cast->wall_heigth;
+	cast->tex_pos = (cast->start_draw - draw->image_heigth
+		/ 2.0 + cast->wall_heigth / 2.0) * cast->tex_y_step;
+}
 
-	double	tex_y_step = 1;
-	tex_y_step = 1.0 * texture->height / wall_heigth;
-	double	tex_pos = (start_draw - draw->image_heigth / 2.0 + wall_heigth / 2.0) * tex_y_step;
-	int	i;
-	i = start_draw;
-	while (i < end_draw)
-	{
-		unsigned int	tex_y;
-		// tex_y = (int) tex_pos & (texture->height - 1);
-		tex_y = tex_pos;
-		if (tex_y >= texture->height)
-			tex_y = texture->height - 1;
-		tex_pos += tex_y_step;
-		// printf("y: %i, x: %i\n", tex_y, tex_x);
-		// tex_x = 0;
-	/* 	printf("%i, %i, %i, %i\n",
-			main_struct->input.ea_texture->pixels[((texture->width * tex_y + tex_x) * 4) + 0],
-			main_struct->input.ea_texture->pixels[((texture->width * tex_y + tex_x) * 4) + 1],
-			main_struct->input.ea_texture->pixels[((texture->width * tex_y + tex_x) * 4) + 2],
-			main_struct->input.ea_texture->pixels[((texture->width * tex_y + tex_x) * 4) + 3]
-		 ); */
-		color = convert_color(
+static unsigned int	get_color_from_texture(mlx_texture_t *texture, int tex_x, int tex_y)
+{
+	return (convert_color(
 			texture->pixels[(texture->width * tex_y + tex_x) * 4],
 			texture->pixels[((texture->width * tex_y + tex_x) * 4) + 1],
 			texture->pixels[((texture->width * tex_y + tex_x) * 4) + 2],
 			texture->pixels[((texture->width * tex_y + tex_x) * 4) + 3]
-		);
+		));
+}
+
+static void	draw_with_texture(mlx_texture_t *texture, t_cast *cast, t_draw *draw)
+{
+	int	i;
+	unsigned int	tex_y;
+	unsigned int	color;
+
+	i = cast->start_draw;
+	while (i < cast->end_draw)
+	{
+		tex_y = cast->tex_pos;
+		if (tex_y >= texture->height)
+			tex_y = texture->height - 1;
+		cast->tex_pos += cast->tex_y_step;
+		color = get_color_from_texture(texture, cast->tex_x, tex_y);
 		mlx_put_pixel(draw->image, cast->cur_screen_col, i, color);
 		i++;
 	}
+}
+
+static void	draw_wall_column_tex(t_cub3D *main_struct, t_cast *cast)
+{
+	t_draw	*draw;
+	mlx_texture_t	*texture;
+
+	draw = &main_struct->draw;
+	calc_wall_heigth(&main_struct->draw, cast);
+	calc_wall_x(cast, &main_struct->draw);	
+	texture = pick_texture(main_struct, cast->wall_side, cast->step_dir);
+	find_pos_in_texture(texture, cast, draw);
+	draw_with_texture(texture, cast, draw);
 }
 
 // camera plane has to be perpendicular to player direction and have a magnitude
@@ -330,29 +340,17 @@ static void	game_hook(void *param)
 	}
 	draw(data, main_struct);
 	if (mlx_is_key_down(mlx, MLX_KEY_LEFT))
-	{
 		cam_turn_left(main_struct);
-	}
 	else if (mlx_is_key_down(mlx, MLX_KEY_RIGHT))
-	{
 		cam_turn_right(main_struct);
-	}
 	else if (mlx_is_key_down(mlx, MLX_KEY_W))
-	{
 		cam_move_fwd(main_struct);
-	}
 	else if (mlx_is_key_down(mlx, MLX_KEY_S))
-	{
 		cam_move_back(main_struct);
-	}
 	else if (mlx_is_key_down(mlx, MLX_KEY_A))
-	{
 		cam_strafe_left(main_struct);
-	}
 	else if (mlx_is_key_down(mlx, MLX_KEY_D))
-	{
 		cam_strafe_right(main_struct);
-	}
 }
 
 void	start_graphics(int image_width, int image_heigth, t_cub3D *main_struct)
