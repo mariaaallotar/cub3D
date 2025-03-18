@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:04:23 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/14 11:27:19 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/18 14:38:14 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,5 +161,7 @@ int	set_map(char *line, int fd, t_map_line **map, t_cub3D *main_struct);
 int	validate_map(t_map_line **map);
 int	check_forbidden_chars(t_map_line *current, t_cub3D *main_struct);
 
+//raycaster.c
+void	draw(t_draw *data, t_cub3D *main_struct);
 
 #endif
