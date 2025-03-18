@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 12:17:02 by maheleni          #+#    #+#             */
-/*   Updated: 2025/03/11 12:23:20 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/13 19:12:13 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,15 @@ int	set_rgb(t_rgb *floor_color, char **rgb_split)
 
 	color = get_color(rgb_split[0]);
 	if (color == -1)
-		return (WRONG_RGB_VALUE);
+		return (print_error_message(WRONG_RGB_VALUE));
 	floor_color->r = color;
 	color = get_color(rgb_split[1]);
 	if (color == -1)
-		return (WRONG_RGB_VALUE);
+		return (print_error_message(WRONG_RGB_VALUE));
 	floor_color->g = color;
 	color = get_color(rgb_split[2]);
 	if (color == -1)
-		return (WRONG_RGB_VALUE);
+		return (print_error_message(WRONG_RGB_VALUE));
 	floor_color->b = color;
 	return (1);
 }
@@ -49,7 +49,6 @@ int	parse_color(char *rgb, enum e_location location, t_cub3D *main_struct)
 {
 	char	**rgb_split;
 	t_rgb	*location_data_pointer;
-	int		return_value;
 
 	if (location == FLOOR)
 		location_data_pointer = &(main_struct->input.floor_color);
@@ -60,11 +59,13 @@ int	parse_color(char *rgb, enum e_location location, t_cub3D *main_struct)
 	rgb_split = ft_split(rgb, ',');
 	if (rgb_split == NULL)
 		return (-1);
-	return_value = set_rgb(location_data_pointer, rgb_split);
-	if (return_value < 0)
-		return (split_free(rgb_split, return_value));
+	if (set_rgb(location_data_pointer, rgb_split) < 0)
+		return (split_free(rgb_split, -1));
 	if (rgb_split[3] != NULL)
-		return (split_free(rgb_split, EXTRA_VALUE));
+	{
+		split_free(rgb_split, 1);
+		return (print_error_message(EXTRA_VALUE));
+	}
 	main_struct->input.identifier_counter++;
 	return (split_free(rgb_split, 1));
 }
@@ -75,14 +76,14 @@ int	set_floor_ceiling(char *type_identifier, char *color_code,
 	if (ft_strncmp("F\0", type_identifier, 2) == 0)
 	{
 		if (main_struct->input.floor_color.r != -1)
-			return (DOUBLE_COLOR_ID);
+			return (print_error_message(DOUBLE_COLOR_ID));
 		return (parse_color(color_code, FLOOR, main_struct));
 	}
 	else if (ft_strncmp("C\0", type_identifier, 2) == 0)
 	{
 		if (main_struct->input.ceiling_color.r != -1)
-			return (DOUBLE_COLOR_ID);
+			return (print_error_message(DOUBLE_COLOR_ID));
 		return (parse_color(color_code, CEILING, main_struct));
 	}
-	return (NOT_IDENTIFIER);
+	return (print_error_message(NOT_IDENTIFIER));
 }
