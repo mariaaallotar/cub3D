@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:52:54 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/18 15:56:45 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/19 13:59:39 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,11 +91,13 @@ bool	out_of_bounds(t_point_int ray_pos, char **map)
 {
 	if (ray_pos.y < 0 || ray_pos.x < 0)
 		return (true);
+	if (map[ray_pos.y] == NULL)
+		return (true);
 	if (map[ray_pos.y][ray_pos.x] == ' ')
 		return (true);
 	if (map[ray_pos.y][ray_pos.x] == '\0')
 		return (true);
-	if (map[ray_pos.y] == NULL)
+	if (map[ray_pos.y][ray_pos.x] == '\n')
 		return (true);
 	return (false);
 }
