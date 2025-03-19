@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 13:06:24 by maheleni          #+#    #+#             */
-/*   Updated: 2025/03/14 11:30:01 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/19 11:08:37 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,19 @@ void	free_2d_array(t_cub3D *main_struct)
 		i++;
 	}
 	free(map);
+}
+
+void	empty_gnl_buffer(int fd)
+{
+	char	*line;
+
+	line = get_next_line(fd);
+	while (line != NULL)
+	{
+		free(line);
+		line = get_next_line(fd);
+	}
+	close(fd);
 }
 
 void	free_everything(t_cub3D	*main_struct, t_map_line **map)

@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 13:41:08 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/14 11:09:25 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/19 10:59:04 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ static void	init_game(t_cub3D *main_struct)
 	image_width = 1280;
 	image_heigth = 1024;
 	start_graphics(image_width, image_heigth, main_struct);
+	mlx_loop_hook(main_struct->draw.mlx, game_hook, main_struct);
+	mlx_loop(main_struct->draw.mlx);
 }
 
 static int	open_file(char *filename)
@@ -70,5 +72,7 @@ int	main(int argc, char **argv)
 	parse_input(fd, &main_struct);
 	init_game(&main_struct);
 	free_everything(&main_struct, NULL);
+	mlx_delete_image(main_struct.draw.mlx, main_struct.draw.image);
+	mlx_terminate(main_struct.draw.mlx);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:04:23 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/18 15:22:27 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/19 10:12:55 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ typedef struct s_input
 typedef struct s_cub3D
 {
 	t_input input;
-	t_draw	draw;		//pointer?
+	t_draw	draw;
 }	t_cub3D;
 
 //validate_args.c
@@ -121,6 +121,7 @@ void	validate_arguments(int argc, char **argv);
 int32_t convert_color(int32_t r, int32_t g, int32_t b, int32_t a);
 //game_loop.c
 void	start_graphics(int image_width, int image_heigth, t_cub3D *main_struct);
+void	game_hook(void *param);
 
 //draw_tools.c
 void	 draw_vert_line(mlx_image_t *image, int x, int start_y, int end_y, \
@@ -139,6 +140,7 @@ void	cam_turn_right(t_cub3D *main_struct);
 void	free_everything(t_cub3D	*main_struct, t_map_line **map);
 void	free_map_list(t_map_line **map);
 void	free_map_nodes(t_map_line **map);
+void	empty_gnl_buffer(int fd);
 	
 //parse_file.c
 void    parse_input(int fd, t_cub3D *main_struct);
