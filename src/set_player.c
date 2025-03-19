@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 11:32:22 by maheleni          #+#    #+#             */
-/*   Updated: 2025/03/14 11:33:54 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/19 10:16:58 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,13 @@ void	set_player_direction(char direction, t_cub3D *main_struct)
 void	set_player(t_map_line *current, t_cub3D *main_struct, int i,
 	char direction)
 {
-	main_struct->draw.player_pos.x = i;
+	main_struct->draw.player_pos.x = i + 0.5;
 	i = 0;
 	while (current->previous != NULL)
 	{
 		i++;
 		current = current->previous;
 	}
-	main_struct->draw.player_pos.y = i;
+	main_struct->draw.player_pos.y = i + 0.5;
 	set_player_direction(direction, main_struct);
 }
