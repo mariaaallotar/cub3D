@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:52:54 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/19 13:43:33 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/19 13:59:39 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,14 +89,6 @@ t_point_double	calc_ray_dist_to_side(t_draw *data, t_rcast *rcast)
 
 bool	out_of_bounds(t_point_int ray_pos, char **map)
 {
-/* 	int i = 0;
-	while (map[i] != NULL)
-	{
-		printf("%s\n", map[i]);
-		i++;
-	}
-	exit(1); */
-	printf("%i, %i\n", ray_pos.y, ray_pos.x);
 	if (ray_pos.y < 0 || ray_pos.x < 0)
 		return (true);
 	if (map[ray_pos.y] == NULL)
