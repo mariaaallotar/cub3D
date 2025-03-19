@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:47:14 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/18 16:02:09 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/19 14:56:44 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,14 +61,19 @@ static void	draw_with_texture(mlx_texture_t *texture, t_rcast *rcast,
 	unsigned int	color;
 
 	i = rcast->start_draw;
-	while (i < rcast->end_draw)
+	while (i <= rcast->end_draw)
 	{
 		tex_y = rcast->tex_pos;
 		if (tex_y >= texture->height)
 			tex_y = texture->height - 1;
 		rcast->tex_pos += rcast->tex_y_step;
 		color = get_color_from_texture(texture, rcast->tex_x, tex_y);
-		mlx_put_pixel(draw->image, cur_screen_col, i, color);
+		if (cur_screen_col >= 0
+			&& (unsigned int) cur_screen_col < draw->image->width
+			&& i >= 0 && (unsigned int) i < draw->image->height)
+		{
+			mlx_put_pixel(draw->image, cur_screen_col, i, color);
+		}
 		i++;
 	}
 }
