@@ -6,13 +6,13 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 11:39:54 by maheleni          #+#    #+#             */
-/*   Updated: 2025/03/14 13:56:50 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/19 14:26:08 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
 
-void	get_chars(t_chars *chars, t_map_line *current, int i)
+static void	get_chars(t_chars *chars, t_map_line *current, int i)
 {
 	if (i > 0)
 		chars->left = current->line[i - 1];

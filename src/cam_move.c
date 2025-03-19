@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cam_move.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 11:58:27 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/19 13:54:19 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/19 14:20:04 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ bool	pos_walkable(t_cub3D *main_struct, t_point_double new_pos)
 void	cam_move_fwd(t_cub3D *main_struct)
 {
 	t_point_double	new_pos;
-	t_draw	*data;
+	t_draw			*data;
 
 	data = &main_struct->draw;
 	new_pos.y = data->player_pos.y + data->player_dir.y * g_player_walk_speed;
@@ -53,7 +53,7 @@ void	cam_move_fwd(t_cub3D *main_struct)
 void	cam_move_back(t_cub3D *main_struct)
 {
 	t_point_double	new_pos;
-	t_draw	*data;
+	t_draw			*data;
 
 	data = &main_struct->draw;
 	new_pos.y = data->player_pos.y - data->player_dir.y * g_player_walk_speed;
@@ -69,7 +69,7 @@ void	cam_move_back(t_cub3D *main_struct)
 void	cam_strafe_left(t_cub3D *main_struct)
 {
 	t_point_double	new_pos;
-	t_draw	*data;
+	t_draw			*data;
 
 	data = &main_struct->draw;
 	new_pos.y = data->player_pos.y - data->player_dir.x * g_player_walk_speed;
@@ -83,7 +83,7 @@ void	cam_strafe_left(t_cub3D *main_struct)
 void	cam_strafe_right(t_cub3D *main_struct)
 {
 	t_point_double	new_pos;
-	t_draw	*data;
+	t_draw			*data;
 
 	data = &main_struct->draw;
 	new_pos.y = data->player_pos.y + data->player_dir.x * g_player_walk_speed;

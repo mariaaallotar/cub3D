@@ -6,13 +6,13 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 10:29:56 by maheleni          #+#    #+#             */
-/*   Updated: 2025/03/19 11:19:22 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/19 14:29:42 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
 
-int	parse_split_line(char **split_line, t_cub3D *main_struct)
+static int	parse_split_line(char **split_line, t_cub3D *main_struct)
 {
 	if (split_line[0][0] == 'F' || split_line[0][0] == 'C')
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cam_turn.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:05:39 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/14 15:38:02 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/19 14:19:22 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static void	cam_turn(t_draw *data, double angle)
 {
-	double new_x;
-	double new_y;
+	double	new_x;
+	double	new_y;
 
 	new_x = data->player_dir.x * cos(angle) - data->player_dir.y * sin(angle);
 	new_y = data->player_dir.x * sin(angle) + data->player_dir.y * cos(angle);

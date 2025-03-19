@@ -6,13 +6,13 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 12:17:02 by maheleni          #+#    #+#             */
-/*   Updated: 2025/03/19 13:16:29 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/19 14:48:53 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
 
-int	get_color(char *color)
+static int	get_color(char *color)
 {
 	int	number;
 	int	error;
@@ -32,7 +32,7 @@ int	get_color(char *color)
 	return (-1);
 }
 
-int	set_rgb(t_rgb *floor_color, char **rgb_split)
+static int	set_rgb(t_rgb *floor_color, char **rgb_split)
 {
 	int	color;
 
@@ -51,7 +51,8 @@ int	set_rgb(t_rgb *floor_color, char **rgb_split)
 	return (1);
 }
 
-int	parse_color(char *rgb, enum e_location location, t_cub3D *main_struct)
+static int	parse_color(char *rgb, enum e_location location,
+	t_cub3D *main_struct)
 {
 	char	**rgb_split;
 	t_rgb	*location_data_pointer;

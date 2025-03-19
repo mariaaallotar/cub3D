@@ -6,13 +6,13 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 11:32:22 by maheleni          #+#    #+#             */
-/*   Updated: 2025/03/19 10:16:58 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/19 14:30:08 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
 
-void	set_player_direction(char direction, t_cub3D *main_struct)
+static void	set_player_direction(char direction, t_cub3D *main_struct)
 {
 	int	x;
 	int	y;

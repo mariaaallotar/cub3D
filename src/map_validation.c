@@ -6,13 +6,13 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 13:58:48 by maheleni          #+#    #+#             */
-/*   Updated: 2025/03/14 11:56:57 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/19 14:26:30 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
 
-int	validate_line(t_map_line *current)
+static int	validate_line(t_map_line *current)
 {
 	int		i;
 	char	c;

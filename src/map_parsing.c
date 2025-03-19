@@ -6,19 +6,21 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 12:20:31 by maheleni          #+#    #+#             */
-/*   Updated: 2025/03/19 11:28:02 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/19 15:22:19 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
 
-int	set_map_line(t_map_line *current, char *line, t_map_line *previous,
+static int	set_map_line(t_map_line *current, char *line, t_map_line *previous,
 	t_cub3D *main_struct)
 {
 	current->line = line;
 	current->length = ft_strlen(line);
 	if (line[current->length - 1] == '\n')
 		current->length--;
+	if (current->length > g_max_map_width)
+		return (print_error_message(MAP_TOO_BIG));
 	current->previous = previous;
 	current->next = NULL;
 	if (previous != NULL)
@@ -28,8 +30,8 @@ int	set_map_line(t_map_line *current, char *line, t_map_line *previous,
 	return (1);
 }
 
-int	init_line_struct(t_map_line **current, t_map_line **previous, char **line,
-	t_map_line **map)
+static int	init_line_struct(t_map_line **current, t_map_line **previous,
+	char **line, t_map_line **map)
 {
 	*current = malloc (sizeof(t_map_line));
 	if (*current == NULL)
@@ -43,7 +45,7 @@ int	init_line_struct(t_map_line **current, t_map_line **previous, char **line,
 	return (1);
 }
 
-int	set_map(char *line, int fd, t_map_line **map, t_cub3D *main_struct)
+static int	set_map(char *line, int fd, t_map_line **map, t_cub3D *main_struct)
 {
 	t_map_line	*current;
 	t_map_line	*previous;

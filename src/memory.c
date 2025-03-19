@@ -6,24 +6,25 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 13:06:24 by maheleni          #+#    #+#             */
-/*   Updated: 2025/03/19 11:08:37 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/19 14:29:21 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
 
-void	free_map_nodes(t_map_line **map)
+static void	free_2d_array(t_cub3D *main_struct)
 {
-	t_map_line	*current;
-	t_map_line	*next;
+	char	**map;
+	int		i;
 
-	current = *map;
-	while (current != NULL)
+	i = 0;
+	map = main_struct->input.map;
+	while (map[i] != NULL)
 	{
-		next = current->next;
-		free(current);
-		current = next;
+		free(map[i]);
+		i++;
 	}
+	free(map);
 }
 
 void	free_map_list(t_map_line **map)
@@ -46,19 +47,18 @@ void	free_map_list(t_map_line **map)
 	}
 }
 
-void	free_2d_array(t_cub3D *main_struct)
+void	free_map_nodes(t_map_line **map)
 {
-	char	**map;
-	int		i;
+	t_map_line	*current;
+	t_map_line	*next;
 
-	i = 0;
-	map = main_struct->input.map;
-	while (map[i] != NULL)
+	current = *map;
+	while (current != NULL)
 	{
-		free(map[i]);
-		i++;
+		next = current->next;
+		free(current);
+		current = next;
 	}
-	free(map);
 }
 
 void	empty_gnl_buffer(int fd)
