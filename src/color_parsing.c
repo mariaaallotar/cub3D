@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 12:17:02 by maheleni          #+#    #+#             */
-/*   Updated: 2025/03/19 10:13:47 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/19 13:16:29 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,18 @@
 int	get_color(char *color)
 {
 	int	number;
+	int	error;
 
+	error = 0;
 	if (color == NULL)
 		return (-1);
 	if (!ft_isdigit(*color))
 		return (-1);
-	number = ft_atoi(color);
+	if (color[ft_strlen(color) - 1] == '\n')
+		color[ft_strlen(color) - 1] = '\0';
+	number = ft_atoi_safe(color, &error);
+	if (error)
+		return (-1);
 	if (number >= 0 && number <= 255)
 		return (number);
 	return (-1);
