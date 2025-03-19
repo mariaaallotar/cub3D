@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 13:41:08 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/19 14:24:00 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/19 16:05:33 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ static void	init_game(t_cub3D *main_struct)
 	int		image_width;
 	int		image_heigth;
 
-	image_width = 1280;
-	image_heigth = 1024;
+	image_width = 1920;
+	image_heigth = 1080;
 	start_graphics(image_width, image_heigth, main_struct);
 	mlx_loop_hook(main_struct->draw.mlx, game_hook, main_struct);
 	mlx_loop(main_struct->draw.mlx);
