@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 11:00:53 by maheleni          #+#    #+#             */
-/*   Updated: 2025/03/14 11:08:44 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/19 11:14:07 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	read_file(int fd, t_map_line **map, t_cub3D *main_struct)
 			if (parse_map(&line, fd, map, main_struct) < 0)
 			{
 				free_everything(main_struct, map);
-				close(fd);
+				empty_gnl_buffer(fd);
 				exit(1);
 			}
 			return ;

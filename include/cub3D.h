@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:04:23 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/18 15:22:27 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/19 11:49:16 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,24 @@ typedef struct s_point_int
 	int	y;
 }	t_point_int;
 
+typedef struct s_rcast
+{
+	t_point_double	ray_dir;
+	t_point_double	ray_step_dist;
+	t_point_int		ray_pos;
+	t_point_double	ray_dist_to_side;
+	t_point_int		step_dir;
+	int				wall_side;
+	double			perp_wall_dist;
+	int				wall_heigth;
+	int				start_draw;
+	int				end_draw;
+	double			wall_x;
+	int				tex_x;
+	double			tex_y_step;
+	double			tex_pos;
+}	t_rcast;
+
 typedef struct s_draw
 {
 	mlx_t			*mlx;
@@ -110,7 +128,7 @@ typedef struct s_input
 typedef struct s_cub3D
 {
 	t_input input;
-	t_draw	draw;		//pointer?
+	t_draw	draw;
 }	t_cub3D;
 
 //validate_args.c
@@ -119,12 +137,13 @@ void	validate_arguments(int argc, char **argv);
 
 //colors.c
 int32_t convert_color(int32_t r, int32_t g, int32_t b, int32_t a);
+unsigned int	get_color_from_texture(mlx_texture_t *texture, int tex_x,
+											int tex_y);
 //game_loop.c
 void	start_graphics(int image_width, int image_heigth, t_cub3D *main_struct);
+void	game_hook(void *param);
 
 //draw_tools.c
-void	 draw_vert_line(mlx_image_t *image, int x, int start_y, int end_y, \
-	uint32_t color);
 void	draw_floor_and_ceiling(t_cub3D *main_struct);
 	
 //cam_move.c
@@ -139,6 +158,7 @@ void	cam_turn_right(t_cub3D *main_struct);
 void	free_everything(t_cub3D	*main_struct, t_map_line **map);
 void	free_map_list(t_map_line **map);
 void	free_map_nodes(t_map_line **map);
+void	empty_gnl_buffer(int fd);
 	
 //parse_file.c
 void    parse_input(int fd, t_cub3D *main_struct);
@@ -177,4 +197,18 @@ int	check_zero(t_map_line *current, int i);
 int	check_player(t_map_line *current, int i);
 int	rest_is_whitespace(int fd);
 
+//textured_wall.c
+void	draw_wall_column_tex(t_cub3D *main_struct, t_rcast *rcast,
+								int cur_screen_col);
+
+// raycaster_calcs.c
+t_point_double	calc_ray_direction(t_draw *data, int cur_screen_col);
+t_point_double	calc_ray_step_distance(t_point_double ray_dir);
+t_point_int		calc_ray_step_direction(t_point_double ray_dir);
+t_point_double	calc_ray_dist_to_side(t_draw *data, t_rcast *rcast);
+bool			out_of_bounds(t_point_int ray_pos, char **map);
+
+//pick_texture.c
+mlx_texture_t	*pick_texture(t_cub3D *main_struct, int wall_side,
+										t_point_int step_dir);
 #endif

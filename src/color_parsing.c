@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 12:17:02 by maheleni          #+#    #+#             */
-/*   Updated: 2025/03/13 19:12:13 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/19 10:13:47 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	parse_color(char *rgb, enum e_location location, t_cub3D *main_struct)
 		return (-1);
 	rgb_split = ft_split(rgb, ',');
 	if (rgb_split == NULL)
-		return (-1);
+		return (print_error_message(-1));
 	if (set_rgb(location_data_pointer, rgb_split) < 0)
 		return (split_free(rgb_split, -1));
 	if (rgb_split[3] != NULL)

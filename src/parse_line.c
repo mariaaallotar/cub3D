@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 10:29:56 by maheleni          #+#    #+#             */
-/*   Updated: 2025/03/14 10:31:30 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/19 11:19:22 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,19 +34,19 @@ void	parse_line(char **line, int fd, t_map_line **map, t_cub3D *main_struct)
 	char	**split_line;
 
 	split_line = ft_split(*line, ' ');
+	free(*line);
 	if (split_line == NULL)
 	{
 		free_everything(main_struct, map);
-		close(fd);
+		empty_gnl_buffer(fd);
 		print_error_message(-1);
 		exit(1);
 	}
-	free(*line);
 	if (parse_split_line(split_line, main_struct) < 0)
 	{
 		split_free(split_line, 0);
 		free_everything(main_struct, map);
-		close(fd);
+		empty_gnl_buffer(fd);
 		exit(1);
 	}
 	split_free(split_line, 0);
