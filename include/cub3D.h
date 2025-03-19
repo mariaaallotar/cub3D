@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 15:04:23 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/18 16:03:50 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/19 11:49:16 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ typedef struct s_input
 typedef struct s_cub3D
 {
 	t_input input;
-	t_draw	draw;		//pointer?
+	t_draw	draw;
 }	t_cub3D;
 
 //validate_args.c
@@ -141,6 +141,7 @@ unsigned int	get_color_from_texture(mlx_texture_t *texture, int tex_x,
 											int tex_y);
 //game_loop.c
 void	start_graphics(int image_width, int image_heigth, t_cub3D *main_struct);
+void	game_hook(void *param);
 
 //draw_tools.c
 void	draw_floor_and_ceiling(t_cub3D *main_struct);
@@ -157,6 +158,7 @@ void	cam_turn_right(t_cub3D *main_struct);
 void	free_everything(t_cub3D	*main_struct, t_map_line **map);
 void	free_map_list(t_map_line **map);
 void	free_map_nodes(t_map_line **map);
+void	empty_gnl_buffer(int fd);
 	
 //parse_file.c
 void    parse_input(int fd, t_cub3D *main_struct);
