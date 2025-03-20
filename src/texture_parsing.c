@@ -6,13 +6,13 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 12:18:38 by maheleni          #+#    #+#             */
-/*   Updated: 2025/03/19 11:22:42 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/19 14:30:27 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
 
-int	set_texture(char *texture, mlx_texture_t **texture_location_pointer)
+static int	set_texture(char *texture, mlx_texture_t **texture_location_pointer)
 {
 	*texture_location_pointer = mlx_load_png(texture);
 	free(texture);
@@ -24,7 +24,7 @@ int	set_texture(char *texture, mlx_texture_t **texture_location_pointer)
 	return (1);
 }
 
-int	set_texture_location_pointer(char *type_identifier,
+static int	set_texture_location_pointer(char *type_identifier,
 	mlx_texture_t ***texture_location_pointer, t_cub3D *main_struct)
 {
 	if (ft_strncmp("NO\0", type_identifier, 3) == 0

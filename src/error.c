@@ -6,13 +6,13 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 13:07:50 by maheleni          #+#    #+#             */
-/*   Updated: 2025/03/14 12:27:53 by maheleni         ###   ########.fr       */
+/*   Updated: 2025/03/19 15:25:29 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
 
-void	map_errors(int return_value)
+static void	map_errors(int return_value)
 {
 	if (return_value == WRONG_CHAR)
 		ft_putstr_fd("Error: unexpected character in map\n", 2);
@@ -26,9 +26,11 @@ void	map_errors(int return_value)
 		ft_putstr_fd("Error: map has an empty line\n", 2);
 	else if (return_value == PLAYER_OUTSIDE)
 		ft_putstr_fd("Error: player must be inside of map\n", 2);
+	else if (return_value == MAP_TOO_BIG)
+		ft_putstr_fd("Error: map too big\n", 2);
 }
 
-void	identifier_errors(int return_value)
+static void	identifier_errors(int return_value)
 {
 	if (return_value == WRONG_RGB_VALUE)
 		ft_putstr_fd("Error: incorrect rgb value\n", 2);
@@ -59,7 +61,10 @@ int	print_error_message(int return_value)
 	}
 	else if (errno != 0)
 		perror("Error");
-	identifier_errors(return_value);
-	map_errors(return_value);
+	else
+	{
+		identifier_errors(return_value);
+		map_errors(return_value);
+	}
 	return (-1);
 }

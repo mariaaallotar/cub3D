@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 13:41:08 by lemercie          #+#    #+#             */
-/*   Updated: 2025/03/19 15:55:24 by lemercie         ###   ########.fr       */
+/*   Updated: 2025/03/19 16:05:33 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	open_file(char *filename)
 	return (fd);
 }
 
-void	init_input_struct(t_input *input)
+static void	init_input_struct(t_input *input)
 {
 	input->ceiling_color.r = -1;
 	input->ceiling_color.g = -1;
@@ -53,7 +53,7 @@ void	init_input_struct(t_input *input)
 	input->identifier_counter = 0;
 }
 
-void	init_main_struct(t_cub3D *main_struct)
+static void	init_main_struct(t_cub3D *main_struct)
 {
 	init_input_struct(&(main_struct->input));
 	main_struct->draw.player_dir.x = 0;
