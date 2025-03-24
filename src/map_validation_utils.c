@@ -50,7 +50,7 @@ int	check_player(t_map_line *current, int i)
 	get_chars(&chars, current, i);
 	if (chars.left == ' ' || chars.right == ' '
 		|| chars.up == ' ' || chars.down == ' ')
-		return (print_error_message(WALL_ERROR));
+		return (print_error_message(PLAYER_OUTSIDE));
 	return (1);
 }
 

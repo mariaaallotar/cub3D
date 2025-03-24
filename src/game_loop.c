@@ -33,12 +33,10 @@ void	game_hook(void *param)
 	t_cub3D		*main_struct;
 	t_draw		*data;
 	mlx_t		*mlx;
-	mlx_image_t	*image;
 
 	main_struct = param;
 	data = &(main_struct->draw);
 	mlx = data->mlx;
-	image = data->image;
 	if (mlx_is_key_down(mlx, MLX_KEY_ESCAPE))
 	{
 		mlx_close_window(mlx);
